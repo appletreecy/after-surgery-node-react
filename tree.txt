@@ -1,0 +1,45 @@
+after-surgery-node-react/
+├─ backend/
+│ ├─ Dockerfile
+│ ├─ package.json
+│ ├─ tsconfig.json
+│ ├─ prisma/
+│ │ ├─ schema.prisma
+│ │ └─ seed.ts
+│ ├─ src/
+│ │ ├─ server.ts
+│ │ ├─ env.ts
+│ │ ├─ lib/prisma.ts
+│ │ ├─ middleware/auth.ts
+│ │ ├─ routes/auth.ts
+│ │ ├─ routes/records.ts
+│ │ ├─ schemas/
+│ │ │ ├─ auth.ts
+│ │ │ └─ record.ts
+│ │ └─ types/index.d.ts
+│ └─ .env
+├─ frontend/
+│ ├─ index.html
+│ ├─ package.json
+│ ├─ vite.config.ts
+│ ├─ tailwind.config.js
+│ ├─ postcss.config.js
+│ ├─ tsconfig.json
+│ ├─ src/
+│ │ ├─ main.tsx
+│ │ ├─ App.tsx
+│ │ ├─ lib/api.ts
+│ │ ├─ context/AuthContext.tsx
+│ │ ├─ pages/
+│ │ │ ├─ Login.tsx
+│ │ │ ├─ Register.tsx
+│ │ │ ├─ Dashboard.tsx
+│ │ │ ├─ Records.tsx
+│ │ │ └─ NotFound.tsx
+│ │ ├─ components/
+│ │ │ ├─ Header.tsx
+│ │ │ ├─ RecordForm.tsx
+│ │ │ └─ DataTable.tsx
+│ │ └─ styles/index.css
+├─ docker-compose.yml
+└─ README.md

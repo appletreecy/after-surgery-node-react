@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: aftersurgery-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: aftersurgery
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+
