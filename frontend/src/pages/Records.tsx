@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { api } from '../lib/api';
+import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-
 
 export default function Records(){
     const [items,setItems]=useState<any[]>([]);
@@ -11,13 +10,11 @@ export default function Records(){
     const [open,setOpen]=useState(false);
     const [form,setForm]=useState({surgeryDate:'',patientName:'',procedure:'',doctor:'',department:'',notes:'',outcome:''});
 
-
     async function load(){
         const r = await api.get('/records',{ params: { q } });
         setItems(r.data.items);
     }
     useEffect(()=>{ load(); },[]);
-
 
     async function create(){
         await api.post('/records', form);
@@ -25,52 +22,65 @@ export default function Records(){
         await load();
     }
 
-
     async function remove(id:number){
         await api.delete(`/records/${id}`);
         await load();
     }
 
-
     return (
         <div className="space-y-4">
-            <div className="flex items-center gap-2">
-                <Input placeholder="Search" value={q} onChange={e=>setQ(e.target.value)} />
-                <Button onClick={load}>Search</Button>
-                <Button onClick={()=>setOpen(true)}>Add</Button>
+            {/* Filters + actions */}
+            <div className="flex flex-wrap items-center gap-2">
+                <Input placeholder="Search" value={q} onChange={e=>setQ(e.target.value)} className="w-64" />
+                <Button onClick={load} className="bg-indigo-600 hover:bg-indigo-700 text-white">Search</Button>
+                <Button onClick={()=>setOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white">Add</Button>
             </div>
 
-
-            <table className="w-full text-sm">
-                <thead>
-                <tr className="text-left border-b">
-                    <th className="py-2">Date</th>
-                    <th>Patient</th>
-                    <th>Procedure</th>
-                    <th>Doctor</th>
-                    <th>Department</th>
-                    <th>Outcome</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {items.map(r=> (
-                    <tr key={r.id} className="border-b">
-                        <td className="py-2">{new Date(r.surgeryDate).toLocaleDateString()}</td>
-                        <td>{r.patientName}</td>
-                        <td>{r.procedure}</td>
-                        <td>{r.doctor}</td>
-                        <td>{r.department}</td>
-                        <td>{r.outcome||'-'}</td>
-                        <td>
-                            <Button variant="destructive" onClick={()=>remove(r.id)}>Delete</Button>
-                        </td>
+            {/* Table container (commercial polish) */}
+            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                <table className="w-full text-sm">
+                    <thead>
+                    <tr className="text-left border-b bg-gray-50">
+                        <th className="py-2 px-3">Date</th>
+                        <th className="px-3">Patient</th>
+                        <th className="px-3">Procedure</th>
+                        <th className="px-3">Doctor</th>
+                        <th className="px-3">Department</th>
+                        <th className="px-3">Outcome</th>
+                        <th className="px-3 w-32"></th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {items.map(r=> (
+                        <tr key={r.id} className="border-b hover:bg-gray-50">
+                            <td className="py-2 px-3">{new Date(r.surgeryDate).toLocaleDateString()}</td>
+                            <td className="px-3">{r.patientName}</td>
+                            <td className="px-3">{r.procedure}</td>
+                            <td className="px-3">{r.doctor}</td>
+                            <td className="px-3">{r.department}</td>
+                            <td className="px-3">{r.outcome||'-'}</td>
+                            <td className="px-3">
+                                <Button
+                                    onClick={()=>remove(r.id)}
+                                    className="bg-red-600 hover:bg-red-700 text-white"
+                                >
+                                    Delete
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
+                    {items.length === 0 && (
+                        <tr>
+                            <td colSpan={7} className="py-10 text-center text-gray-500">
+                                No records found.
+                            </td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
+            </div>
 
-
+            {/* Create dialog */}
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <DialogHeader><DialogTitle>New record</DialogTitle></DialogHeader>
@@ -82,7 +92,7 @@ export default function Records(){
                         <Input placeholder="Department" value={form.department} onChange={e=>setForm({...form,department:e.target.value})} />
                         <Input placeholder="Outcome" value={form.outcome} onChange={e=>setForm({...form,outcome:e.target.value})} />
                         <Input placeholder="Notes" value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})} />
-                        <Button onClick={create}>Create</Button>
+                        <Button onClick={create} className="bg-indigo-600 hover:bg-indigo-700 text-white">Create</Button>
                     </div>
                 </DialogContent>
             </Dialog>

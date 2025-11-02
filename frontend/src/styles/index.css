@@ -1,73 +1,42 @@
 /* Tailwind v4 entrypoint */
 @import "tailwindcss";
 
-/* ---- Theme tokens for shadcn/ui (v4-friendly) ----
-   These map to rgb(var(--token)) usage in components.
-*/
+/* Commercial SaaS theme tokens */
 :root {
-    /* App surface + text */
-    --background: 255 255 255;         /* white */
-    --foreground: 17 24 39;            /* gray-900 */
+    /* Neutral, professional surfaces */
+    --background: 249 250 251;          /* gray-50 */
+    --foreground: 17 24 39;             /* gray-900 */
 
-    /* Cards / popovers */
-    --card: 255 255 255;
+    --card: 255 255 255;                /* white */
     --card-foreground: 17 24 39;
+
     --popover: 255 255 255;
     --popover-foreground: 17 24 39;
 
-    /* Brand */
-    --primary: 59 130 246;             /* blue-500 */
-    --primary-foreground: 255 255 255; /* white */
+    /* Brand: indigo */
+    --primary: 79 70 229;               /* indigo-600 */
+    --primary-foreground: 255 255 255;  /* white */
 
-    /* Secondary / accents */
-    --secondary: 229 231 235;          /* gray-200 */
-    --secondary-foreground: 28 25 23;  /* stone-900 */
-    --accent: 229 231 235;
-    --accent-foreground: 28 25 23;
+    /* Accents / secondary */
+    --secondary: 243 244 246;           /* gray-100 */
+    --secondary-foreground: 31 41 55;   /* gray-800 */
 
     /* Destructive */
-    --destructive: 239 68 68;          /* red-500 */
+    --destructive: 220 38 38;           /* red-600 */
     --destructive-foreground: 255 255 255;
 
     /* Forms / borders / focus ring */
-    --muted: 243 244 246;              /* gray-100 */
-    --muted-foreground: 107 114 128;   /* gray-500 */
-    --border: 229 231 235;             /* gray-200 */
-    --input: 229 231 235;              /* gray-200 */
-    --ring: 59 130 246;                /* blue-500 */
+    --muted: 243 244 246;               /* gray-100 */
+    --muted-foreground: 107 114 128;    /* gray-500 */
+    --border: 229 231 235;              /* gray-200 */
+    --input: 229 231 235;               /* gray-200 */
+    --ring: 79 70 229;                  /* indigo-600 */
 
-    /* Radius */
-    --radius: 0.5rem;                  /* 8px */
+    /* Softer rounding */
+    --radius: 0.75rem;                  /* 12px */
 }
 
-/* Optional dark mode (enable if/when you add .dark on <html>) */
-/*
-:root.dark {
-  --background: 17 24 39;            # gray-900
-  --foreground: 243 244 246;         # gray-100
-  --card: 17 24 39;
-  --card-foreground: 243 244 246;
-  --popover: 17 24 39;
-  --popover-foreground: 243 244 246;
-  --primary: 59 130 246;
-  --primary-foreground: 255 255 255;
-  --secondary: 38 38 38;             # neutral-800
-  --secondary-foreground: 243 244 246;
-  --accent: 38 38 38;
-  --accent-foreground: 243 244 246;
-  --destructive: 239 68 68;
-  --destructive-foreground: 255 255 255;
-  --muted: 31 41 55;                 # gray-800
-  --muted-foreground: 156 163 175;   # gray-400
-  --border: 38 38 38;
-  --input: 38 38 38;
-  --ring: 59 130 246;
-}
-*/
-
-/* Base element resets that rely on tokens */
-
-/* Ensure full-width layout */
+/* Base resets to ensure full-width layout */
 html, body, #root {
     height: 100%;
     width: 100%;
@@ -75,25 +44,20 @@ html, body, #root {
     padding: 0;
 }
 
+/* Use Inter font if loaded in index.html */
 body {
     background: rgb(var(--background));
     color: rgb(var(--foreground));
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+    font-feature-settings: "rlig" 1, "calt" 1;
 }
 
 /* Make borders default to the design token */
-* {
-    border-color: rgb(var(--border));
-}
+* { border-color: rgb(var(--border)); }
 
-/* Utility helpers you’ll likely want */
-.container {
-    margin-inline: auto;
-    padding-inline: 1rem;
-    width: 100%;
-    max-width: 80rem; /* ~1280px */
-}
-
-/* Radius helper for shadcn components that read --radius */
+/* Radius helpers (used by some shadcn components) */
 :root {
     --radius-sm: calc(var(--radius) - 2px);
     --radius-md: var(--radius);
