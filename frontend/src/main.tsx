@@ -10,12 +10,14 @@ import Dashboard from './pages/Dashboard'
 import Records from './pages/Records'
 // @ts-ignore
 import NotFound from './pages/NotFound.tsx'
+import TableOne from "@/pages/TableOne";
 
 
 const router = createBrowserRouter([
     { path: '/', element: <App />, children: [
             { index: true, element: <Dashboard/> },
             { path: 'records', element: <Records/> },
+            { path: 'table-one', element: <TableOne/>},
         ]},
     { path: '/login', element: <Login/> },
     { path: '/register', element: <Register/> },

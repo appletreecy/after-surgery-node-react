@@ -34,6 +34,7 @@ export default function App() {
                         <nav className="flex items-center gap-5 text-sm">
                             <a href="/" className={isActive("/")}>Dashboard</a>
                             <a href="/records" className={isActive("/records")}>Records</a>
+                            <a href="/table-one" className={isActive("/table-one")}>Table One</a>
                         </nav>
 
                         <div className="flex items-center gap-3">

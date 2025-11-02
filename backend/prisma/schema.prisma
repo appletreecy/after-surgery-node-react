@@ -5,40 +5,51 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
-
 
 datasource db {
-provider = "mysql"
-url = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
-
 
 model User {
-id Int @id @default(autoincrement())
-email String @unique
-name String
-password String
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-records AfterSurgeryRecord[]
+  id              Int                    @id @default(autoincrement())
+  email           String                 @unique
+  name            String
+  password        String
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  records         AfterSurgeryRecord[]
+  tableOneEntries AfterSurgeryTableOne[] // <-- add this back-reference
 }
 
-
 model AfterSurgeryRecord {
-id Int @id @default(autoincrement())
-user User @relation(fields: [userId], references: [id])
-userId Int
-surgeryDate DateTime
-patientName String
-procedure String
-doctor String
-department String
-notes String?
-outcome String?
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-@@index([userId])
-@@index([surgeryDate])
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  surgeryDate DateTime
+  patientName String
+  procedure   String
+  doctor      String
+  department  String
+  notes       String?
+  outcome     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([surgeryDate])
+}
+
+model AfterSurgeryTableOne {
+  id                               Int      @id @default(autoincrement())
+  user                             User     @relation(fields: [userId], references: [id])
+  userId                           Int
+  date                             DateTime @default(now())
+  numOfAdverseReactionCases        Int?
+  numOfInadequateAnalgesia         Int?
+  numOfPostoperativeAnalgesiaCases Int?
+  numOfPostoperativeVisits         Int?
+  createdAt                        DateTime @default(now())
 }

@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { env } from './env';
 import authRoutes from './routes/auth';
 import recordRoutes from './routes/records';
+import { tableOne } from './routes/tableOne'
 
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors({ origin: env.corsOrigin, credentials: true }));
 app.get('/health', (_, res) => res.json({ ok: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/records', recordRoutes);
+app.use("/api/table-one", tableOne)
 
 
 app.listen(env.port, () => console.log(`API on http://localhost:${env.port}`));
