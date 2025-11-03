@@ -15,7 +15,7 @@ import TableOne from "@/pages/TableOne";
 
 const router = createBrowserRouter([
     { path: '/', element: <App />, children: [
-            { index: true, element: <Dashboard/> },
+            { index: true, element: <TableOne/> },
             { path: 'records', element: <Records/> },
             { path: 'table-one', element: <TableOne/>},
         ]},
