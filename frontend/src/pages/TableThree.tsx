@@ -88,6 +88,9 @@ export default function TableThree() {
 
     const [q, setQ] = useState("");
 
+    // sort state for Date
+    const [dateSort, setDateSort] = useState<"asc" | "desc">("desc");
+
     // default date range = last 30 days to today
     const today = fmtDateYYYYMMDD(new Date());
     const last30 = new Date();
@@ -128,33 +131,6 @@ export default function TableThree() {
         load();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
-
-    // client-side quick filter for q (totals remain server-side)
-    const filtered = useMemo(() => {
-        if (!q) return items;
-        const t = q.toLowerCase();
-        return items.filter((r) => {
-            const fields = [
-                r.numOfJointComplicationCount,
-                r.numOfMotorDysfunctionCount,
-                r.numOfTraumaComplicationCount,
-                r.numOfAnkleComplicationCount,
-                r.numOfPediatricAdverseEventCount,
-                r.numOfSpinalComplicationCount,
-                r.numOfHandSurgeryComplicationCount,
-                r.numOfObstetricAdverseEventCount,
-                r.numOfGynecologicalAdverseEventCount,
-                r.numOfSurgicalTreatmentCount,
-                r.date ? new Date(r.date).toLocaleDateString() : "",
-                new Date(r.createdAt).toLocaleDateString(),
-            ].map((v) => (v === null || v === undefined ? "" : String(v).toLowerCase()));
-            return fields.some((f) => f.includes(t));
-        });
-    }, [q, items]);
-
-    const totalPages = Math.max(1, Math.ceil(total / pageSize));
-    const showingFrom = total ? (page - 1) * pageSize + 1 : 0;
-    const showingTo = Math.min(total, page * pageSize);
 
     function toIntOrNull(v: string) {
         if (v === "" || v == null) return null;
@@ -220,11 +196,58 @@ export default function TableThree() {
         // q is client-side filter only for current page
     }
 
-    // -------- Percentages & pies ----------
-    const tableThreeSumNumber = sums.numOfJointComplicationCount + sums.numOfMotorDysfunctionCount + sums.numOfTraumaComplicationCount +
-        sums.numOfAnkleComplicationCount + sums.numOfPediatricAdverseEventCount + sums.numOfSpinalComplicationCount + sums.numOfHandSurgeryComplicationCount +
-        sums.numOfObstetricAdverseEventCount + sums.numOfGynecologicalAdverseEventCount + sums.numOfSurgicalTreatmentCount || 0;
+    // helper for sorting by date or createdAt
+    function rowTime(r: Row) {
+        const d = r.date ? new Date(r.date) : new Date(r.createdAt);
+        const t = d.getTime();
+        return Number.isFinite(t) ? t : 0;
+    }
 
+    // client-side quick filter + sort (totals remain server-side)
+    const filtered = useMemo(() => {
+        const base = (() => {
+            if (!q) return items;
+            const t = q.toLowerCase();
+            return items.filter((r) => {
+                const fields = [
+                    r.numOfJointComplicationCount,
+                    r.numOfMotorDysfunctionCount,
+                    r.numOfTraumaComplicationCount,
+                    r.numOfAnkleComplicationCount,
+                    r.numOfPediatricAdverseEventCount,
+                    r.numOfSpinalComplicationCount,
+                    r.numOfHandSurgeryComplicationCount,
+                    r.numOfObstetricAdverseEventCount,
+                    r.numOfGynecologicalAdverseEventCount,
+                    r.numOfSurgicalTreatmentCount,
+                    r.date ? new Date(r.date).toLocaleDateString() : "",
+                    new Date(r.createdAt ?? "").toLocaleDateString(),
+                ].map((v) => (v == null ? "" : String(v).toLowerCase()));
+                return fields.some((f) => f.includes(t));
+            });
+        })();
+
+        return base.slice().sort((a, b) =>
+            dateSort === "asc" ? rowTime(a) - rowTime(b) : rowTime(b) - rowTime(a)
+        );
+    }, [q, items, dateSort]);
+
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
+    const showingFrom = total ? (page - 1) * pageSize + 1 : 0;
+    const showingTo = Math.min(total, page * pageSize);
+
+    // -------- Percentages & pies ----------
+    const tableThreeSumNumber =
+        sums.numOfJointComplicationCount +
+        sums.numOfMotorDysfunctionCount +
+        sums.numOfTraumaComplicationCount +
+        sums.numOfAnkleComplicationCount +
+        sums.numOfPediatricAdverseEventCount +
+        sums.numOfSpinalComplicationCount +
+        sums.numOfHandSurgeryComplicationCount +
+        sums.numOfObstetricAdverseEventCount +
+        sums.numOfGynecologicalAdverseEventCount +
+        sums.numOfSurgicalTreatmentCount || 0;
 
     const totalNumOfJointComplicationCount = sums.numOfJointComplicationCount || 0;
     const totalNumOfJointComplicationCountPct = pct(totalNumOfJointComplicationCount, tableThreeSumNumber);
@@ -266,7 +289,6 @@ export default function TableThree() {
     const totalNumOfSurgicalTreatmentCountPct = pct(totalNumOfSurgicalTreatmentCount, tableThreeSumNumber);
     const totalNumOfSurgicalTreatmentCountPctOther = Math.max(0, tableThreeSumNumber - totalNumOfSurgicalTreatmentCount);
 
-
     const jointComplicationCountPie = [
         { name: "Joint Complication Count", value: totalNumOfJointComplicationCount },
         { name: "Other Visits", value: totalNumOfJointComplicationCountPctOther },
@@ -275,48 +297,38 @@ export default function TableThree() {
         { name: "Motor Dysfunction Count", value: totalNumOfMotorDysfunctionCount },
         { name: "Other Visits", value: totalNumOfMotorDysfunctionCountPctOther },
     ];
-
     const traumaComplicationCountPie = [
         { name: "Trauma Complication Count", value: totalNumOfTraumaComplicationCount },
         { name: "Other Visits", value: totalNumOfTraumaComplicationCountPctOther },
     ];
-
     const ankleComplicationCountPie = [
         { name: "Ankle Complication Count", value: totalNumOfAnkleComplicationCount },
         { name: "Other Visits", value: totalNumOfAnkleComplicationCountPctOther },
     ];
-
     const pediatricAdverseEventCountPie = [
         { name: "Pediatric Adverse Event Count", value: totalNumOfPediatricAdverseEventCount },
         { name: "Other Visits", value: totalNumOfPediatricAdverseEventCountPctOther },
     ];
-
     const spinalComplicationCountPie = [
         { name: "Spinal Complication Count", value: totalNumOfSpinalComplicationCount },
         { name: "Other Visits", value: totalNumOfSpinalComplicationCountPctOther },
     ];
-
     const handSurgeryComplicationCountPie = [
         { name: "Hand Surgery Complication Count", value: totalNumOfHandSurgeryComplicationCount },
         { name: "Other Visits", value: totalNumOfHandSurgeryComplicationCountPctOther },
     ];
-
     const obstetricAdverseEventCountPie = [
         { name: "Obstetric Adverse Event Count", value: totalNumOfObstetricAdverseEventCount },
         { name: "Other Visits", value: totalNumOfObstetricAdverseEventCountPctOther },
     ];
-
     const gynecologicalAdverseEventCountPie = [
         { name: "Gynecological Adverse Event Count", value: totalNumOfGynecologicalAdverseEventCount },
         { name: "Other Visits", value: totalNumOfGynecologicalAdverseEventCountPctOther },
     ];
-
     const surgicalTreatmentCountPie = [
         { name: "Surgical Treatment Count", value: totalNumOfSurgicalTreatmentCount },
         { name: "Other Visits", value: totalNumOfSurgicalTreatmentCountPctOther },
     ];
-
-
 
     const COLORS_A = ["#4F46E5", "#CBD5E1"];
     const COLORS_B = ["#06B6D4", "#CBD5E1"];
@@ -430,8 +442,7 @@ export default function TableThree() {
         const XLSX = await import("xlsx");
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.json_to_sheet(data, { cellDates: false });
-        // CHANGED: sheet name to TableThree
-        XLSX.utils.book_append_sheet(wb, ws, "TableThree");
+        XLSX.utils.book_append_sheet(wb, ws, "TableThree"); // fixed sheet name
 
         const wbout = XLSX.write(wb, { type: "array", bookType: "xlsx" });
         const blob = new Blob([wbout], {
@@ -494,7 +505,14 @@ export default function TableThree() {
                 <table className="w-full text-sm">
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
-                        <th className="py-2 px-3">Date</th>
+                        <th
+                            className="py-2 px-3 cursor-pointer select-none"
+                            onClick={() => setDateSort((s) => (s === "asc" ? "desc" : "asc"))}
+                            aria-sort={dateSort === "asc" ? "ascending" : "descending"}
+                            title="Toggle sort"
+                        >
+                            Date {dateSort === "asc" ? "▲" : "▼"}
+                        </th>
                         <th className="px-3">Joint Complication</th>
                         <th className="px-3">Motor Dysfunction</th>
                         <th className="px-3">Trauma Complication</th>
@@ -535,7 +553,6 @@ export default function TableThree() {
                     ))}
                     {filtered.length === 0 && (
                         <tr>
-                            {/* CHANGED: colspan to match 12 columns */}
                             <td colSpan={12} className="py-10 text-center text-gray-500">
                                 No entries found.
                             </td>
@@ -711,14 +728,12 @@ export default function TableThree() {
                         {totalNumOfSurgicalTreatmentCount} / {tableThreeSumNumber} visits
                     </div>
                 </div>
-
             </div>
 
             {/* JointComplicationCount Pie */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-                {/* Adverse vs Other */}
+                {/* Joint vs Other */}
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    {/* CHANGED: heading to match Joint Complication */}
                     <div className="text-sm font-medium mb-3">Joint Complication Count vs Other Visits</div>
                     <div className="w-full h-64">
                         <ResponsiveContainer>
@@ -745,9 +760,8 @@ export default function TableThree() {
                     </div>
                 </div>
 
-                {/* MotorDysfunctionCount Pie */}
+                {/* Motor vs Other */}
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    {/* CHANGED: heading to match Motor Dysfunction */}
                     <div className="text-sm font-medium mb-3">Motor Dysfunction Count vs Other Visits</div>
                     <div className="w-full h-64">
                         <ResponsiveContainer>
@@ -774,9 +788,8 @@ export default function TableThree() {
                     </div>
                 </div>
 
-                {/* TraumaComplicationCount Pie */}
+                {/* Trauma vs Other */}
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    {/* CHANGED: heading to match Trauma Complication */}
                     <div className="text-sm font-medium mb-3">Trauma Complication Count vs Other Visits</div>
                     <div className="w-full h-64">
                         <ResponsiveContainer>
@@ -802,11 +815,9 @@ export default function TableThree() {
                         {totalNumOfTraumaComplicationCount} of {tableThreeSumNumber} visits ({totalNumOfTraumaComplicationCountPct})
                     </div>
                 </div>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+
             {/* AnkleComplicationCount Pie*/}
             <div className="bg-white rounded-xl shadow-sm border p-4">
-                {/* CHANGED: heading to match Ankle Complication */}
                 <div className="text-sm font-medium mb-3">Ankle Complication Count vs Other Visits</div>
                 <div className="w-full h-64">
                     <ResponsiveContainer>
@@ -833,9 +844,8 @@ export default function TableThree() {
                 </div>
             </div>
 
-            {/* Postop Analgesia vs Other */}
+            {/* Pediatric vs Other */}
             <div className="bg-white rounded-xl shadow-sm border p-4">
-                {/* CHANGED: heading to match Pediatric Adverse Event */}
                 <div className="text-sm font-medium mb-3">Pediatric Adverse Event Count vs Other Visits</div>
                 <div className="w-full h-64">
                     <ResponsiveContainer>
@@ -862,9 +872,8 @@ export default function TableThree() {
                 </div>
             </div>
 
-            {/* SpinalComplicationCount Pie*/}
+            {/* Spinal vs Other */}
             <div className="bg-white rounded-xl shadow-sm border p-4">
-                {/* CHANGED: heading to match Spinal Complication */}
                 <div className="text-sm font-medium mb-3">Spinal Complication Count vs Other Visits</div>
                 <div className="w-full h-64">
                     <ResponsiveContainer>
@@ -891,9 +900,8 @@ export default function TableThree() {
                 </div>
             </div>
 
-            {/* HandSurgeryComplicationCount Pie*/}
+            {/* Hand Surgery vs Other */}
             <div className="bg-white rounded-xl shadow-sm border p-4">
-                {/* CHANGED: heading to match Hand Surgery Complication */}
                 <div className="text-sm font-medium mb-3">Hand Surgery Complication Count vs Other Visits</div>
                 <div className="w-full h-64">
                     <ResponsiveContainer>
@@ -920,9 +928,8 @@ export default function TableThree() {
                 </div>
             </div>
 
-            {/* ObstetricAdverseEventCount Pie */}
+            {/* Obstetric vs Other */}
             <div className="bg-white rounded-xl shadow-sm border p-4">
-                {/* CHANGED: heading to match Obstetric Adverse Event */}
                 <div className="text-sm font-medium mb-3">Obstetric Adverse Event Count vs Other Visits</div>
                 <div className="w-full h-64">
                     <ResponsiveContainer>
@@ -949,9 +956,8 @@ export default function TableThree() {
                 </div>
             </div>
 
-            {/* GynecologicalAdverseEventCount Pie */}
+            {/* Gynecological vs Other */}
             <div className="bg-white rounded-xl shadow-sm border p-4">
-                {/* CHANGED: heading to match Gynecological Adverse Event */}
                 <div className="text-sm font-medium mb-3">Gynecological Adverse Event Count vs Other Visits</div>
                 <div className="w-full h-64">
                     <ResponsiveContainer>
@@ -978,9 +984,8 @@ export default function TableThree() {
                 </div>
             </div>
 
-            {/* totalNumOfSurgicalTreatmentCount Pie */}
+            {/* Surgical Treatment vs Other */}
             <div className="bg-white rounded-xl shadow-sm border p-4">
-                {/* CHANGED: heading to match Surgical Treatment */}
                 <div className="text-sm font-medium mb-3">Surgical Treatment Count vs Other Visits</div>
                 <div className="w-full h-64">
                     <ResponsiveContainer>
@@ -1006,11 +1011,9 @@ export default function TableThree() {
                     {totalNumOfSurgicalTreatmentCount} of {tableThreeSumNumber} visits ({totalNumOfSurgicalTreatmentCountPct})
                 </div>
             </div>
-            </div>
-
 
             {/* Create dialog */}
-            <Dialog open={open} onOpenChange={setOpen} >
+            <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="bg-white/100 backdrop-blur-none">
                     <DialogHeader>
                         <DialogTitle>New entry</DialogTitle>
@@ -1021,7 +1024,6 @@ export default function TableThree() {
                             value={form.date}
                             onChange={(e) => setForm({ ...form, date: e.target.value })}
                         />
-                        {/* CHANGED: placeholders only */}
                         <Input
                             type="number"
                             placeholder="Joint Complication Count"
@@ -1111,6 +1113,7 @@ export default function TableThree() {
                     </div>
                 </DialogContent>
             </Dialog>
+        </div>
         </div>
     );
 }
