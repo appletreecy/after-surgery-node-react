@@ -559,7 +559,7 @@ export default function TableOne() {
 
             {/* Create dialog */}
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent>
+                <DialogContent className="bg-white/100 backdrop-blur-none">
                     <DialogHeader>
                         <DialogTitle>New entry</DialogTitle>
                     </DialogHeader>
