@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 
 import authRouter from './routes/auth';
 import { tableOne } from './routes/tableOne'; // ← named import matches your file
+import { tableThree} from "./routes/tableThree";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -26,7 +27,8 @@ app.get('/health', (_req, res) => res.json({ ok: true }));
 
 // IMPORTANT: backend has no /api prefix (Nginx strips /api/)
 app.use('/auth', authRouter);
-app.use('/table-one', tableOne);   // ← mount your router here
+app.use('/table-one', tableOne);
+app.use('/table-one', tableThree); // ← mount your router here
 
 // 404 fallback
 app.use((_req, res) => res.status(404).json({ error: 'Not Found' }));
