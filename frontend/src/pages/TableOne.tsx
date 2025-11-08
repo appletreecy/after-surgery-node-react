@@ -46,6 +46,7 @@ function fmtDateYYYYMMDD(d: Date) {
 
 function pct(numerator: number, denominator: number, digits = 2) {
     if (!denominator || denominator <= 0) return "0%";
+    console.log("for push.")
     return `${((numerator / denominator) * 100).toFixed(digits)}%`;
 }
 
