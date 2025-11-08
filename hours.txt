@@ -1,6 +1,10 @@
-17
+19
 
 
 add tableThree 100%
 
 deploy to linode using github actions 80%
+
+change the tableThree to Eng/Chi toggle func
+
+need to look into the tableThree piechart color issues

@@ -1,7 +1,10 @@
+// backend/src/server.ts
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import authRouter from './routes/auth'; // ← use your real router
+
+import authRouter from './routes/auth';
+import { tableOne } from './routes/tableOne'; // ← named import matches your file
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -10,19 +13,20 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 app.use(express.json());
 app.use(cookieParser());
 
-// Dev CORS only (prod is same-origin via Nginx)
+// Dev CORS only; prod is same-origin via Nginx
 if (NODE_ENV === 'development') {
     app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 }
 
-// Behind Nginx/HTTPS
+// Trust proxy for secure cookies behind Nginx/HTTPS
 app.set('trust proxy', 1);
 
-// Health for Docker healthcheck
+// Health
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
-// IMPORTANT: mount WITHOUT /api (Nginx strips /api/)
+// IMPORTANT: backend has no /api prefix (Nginx strips /api/)
 app.use('/auth', authRouter);
+app.use('/table-one', tableOne);   // ← mount your router here
 
 // 404 fallback
 app.use((_req, res) => res.status(404).json({ error: 'Not Found' }));
