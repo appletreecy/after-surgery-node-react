@@ -1,6 +1,6 @@
-13
+17
 
 
 add tableThree 100%
 
-deploy to linode using github actions
+deploy to linode using github actions 80%

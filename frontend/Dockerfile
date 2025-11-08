@@ -1,3 +1,4 @@
+# --- build ---
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
@@ -5,9 +6,13 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+# --- nginx ---
 FROM nginx:1.27-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-# Optional SPA fallback:
-# RUN rm /etc/nginx/conf.d/default.conf
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /usr/share/nginx/html
+COPY --from=build /app/dist ./
+
+# use our SPA nginx config
+RUN rm -f /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
