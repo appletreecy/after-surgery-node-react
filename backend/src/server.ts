@@ -1,83 +1,103 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import path from 'path';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const JWT_SECRET = process.env.JWT_SECRET || 'replace_me';
+const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || 'aftersurgerytwo.scaocoding.com';
 
-// ─────────────────────────────────────────────
-// Middleware
-// ─────────────────────────────────────────────
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS:
-// - In dev: allow Vite (localhost:5173)
-// - In prod: allow your domain (or disable completely if same-origin via Nginx)
+// If dev, allow Vite; in prod we’re same-origin behind Nginx.
 if (NODE_ENV === 'development') {
-    app.use(
-        cors({
-            origin: 'http://localhost:5173',
-            credentials: true,
-        })
-    );
-} else {
-    // same-origin; Nginx proxies /api so browser sees same host
-    app.use(
-        cors({
-            origin: 'https://aftersurgerytwo.scaocoding.com',
-            credentials: true,
-        })
-    );
+    app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 }
 
-// If behind Nginx + HTTPS and using cookies/sessions
+// Trust proxy so secure cookies work behind Nginx/HTTPS
 app.set('trust proxy', 1);
 
-// ─────────────────────────────────────────────
-// Health check
-// ─────────────────────────────────────────────
-app.get('/health', (_req, res) => {
-    res.json({ ok: true });
-});
+// Health
+app.get('/health', (_req, res) => res.json({ ok: true }));
 
-// ─────────────────────────────────────────────
-// Auth routes
-// ─────────────────────────────────────────────
+// ----- Helpers -----
+type JWTPayload = { sub: string; email: string; name?: string };
+
+function signToken(payload: JWTPayload) {
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+}
+
+function verifyToken(t?: string): JWTPayload | null {
+    try {
+        if (!t) return null;
+        return jwt.verify(t, JWT_SECRET) as JWTPayload;
+    } catch {
+        return null;
+    }
+}
+
+function cookieOptions() {
+    const base = {
+        httpOnly: true as const,
+        sameSite: 'none' as const, // cross-site friendly (works with HTTPS)
+        secure: true as const,     // required for sameSite 'none' in browsers
+        path: '/',
+    };
+    // Set a stable domain so subpaths all share the cookie.
+    // If you deploy under a different host later, make this configurable.
+    return { ...base, domain: COOKIE_DOMAIN };
+}
+
+// ----- Auth routes (no /api prefix; Nginx strips it) -----
 import { Router } from 'express';
 const auth = Router();
 
-// Example handlers — replace with your real logic
+/**
+ * POST /auth/login
+ * Body: { email, password }
+ * Replace the TODO with your real user check (Prisma).
+ */
+auth.post('/login', async (req, res) => {
+    const { email, password } = req.body ?? {};
+    // TODO: Look up user & verify password
+    if (!email || !password) return res.status(400).json({ error: 'Missing credentials' });
+
+    // Example user payload (replace with DB record)
+    const user = { id: 'u1', email, name: 'Demo User' };
+
+    const token = signToken({ sub: user.id, email: user.email, name: user.name });
+    res.cookie('token', token, { ...cookieOptions(), maxAge: 7 * 24 * 3600 * 1000 });
+    return res.json({ ok: true, user: { id: user.id, email: user.email, name: user.name } });
+});
+
+/**
+ * GET /auth/me
+ * Reads JWT from cookie and returns the user payload.
+ */
 auth.get('/me', (req, res) => {
-    res.json({ message: 'User info (mock)', user: null });
+    const token: string | undefined = req.cookies?.token;
+    const payload = verifyToken(token);
+    if (!payload) return res.status(401).json({ error: 'Unauthenticated' });
+    return res.json({ user: { id: payload.sub, email: payload.email, name: payload.name ?? '' } });
 });
 
-auth.post('/register', (req, res) => {
-    const body = req.body;
-    // TODO: insert into DB with Prisma
-    res.json({ message: 'User registered', data: body });
+/**
+ * POST /auth/logout
+ * Clears the auth cookie.
+ */
+auth.post('/logout', (_req, res) => {
+    res.clearCookie('token', cookieOptions());
+    return res.json({ ok: true });
 });
 
-auth.post('/login', (req, res) => {
-    // TODO: verify credentials, issue JWT / cookie
-    res.json({ message: 'Logged in' });
-});
-
-// Mount without `/api` prefix (Nginx strips /api/)
 app.use('/auth', auth);
 
-// ─────────────────────────────────────────────
 // 404 fallback
-// ─────────────────────────────────────────────
-app.use((_req, res) => {
-    res.status(404).json({ error: 'Not Found' });
-});
+app.use((_req, res) => res.status(404).json({ error: 'Not Found' }));
 
-// ─────────────────────────────────────────────
-// Start server
-// ─────────────────────────────────────────────
 app.listen(PORT, () => {
     console.log(`API running on http://localhost:${PORT} (${NODE_ENV})`);
 });
