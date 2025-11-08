@@ -1,3 +1,4 @@
+# .github/workflows/publish-images.yml
 name: Publish Images
 on:
   push:
@@ -21,15 +22,17 @@ jobs:
         run: |
           IMAGE=ghcr.io/appletreecy/after-surgery-node-react-frontend
           TAG_SHA=${GITHUB_SHA::12}
-          docker build -t $IMAGE:latest -t $IMAGE:$TAG_SHA -f frontend/Dockerfile .
+          docker build -t $IMAGE:latest -t $IMAGE:$TAG_SHA -f frontend/Dockerfile frontend
+          #                                                                 ^^^^^^^ build context
           docker push $IMAGE:latest
           docker push $IMAGE:$TAG_SHA
 
-      # BACKEND (add if you have backend Dockerfile)
+      # BACKEND (if you have a backend Dockerfile under backend/)
       - name: Build & push backend
         run: |
           IMAGE=ghcr.io/appletreecy/after-surgery-node-react-backend
           TAG_SHA=${GITHUB_SHA::12}
-          docker build -t $IMAGE:latest -t $IMAGE:$TAG_SHA -f backend/Dockerfile .
+          docker build -t $IMAGE:latest -t $IMAGE:$TAG_SHA -f backend/Dockerfile backend
+          #                                                               ^^^^^^ build context
           docker push $IMAGE:latest
           docker push $IMAGE:$TAG_SHA
