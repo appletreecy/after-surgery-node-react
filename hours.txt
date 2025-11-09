@@ -8,3 +8,5 @@ deploy to linode using github actions 100%
 change the tableThree to Eng/Chi toggle func
 
 need to look into the tableThree piechart color issues
+
+merge the change to main branch
