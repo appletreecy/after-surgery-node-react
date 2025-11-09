@@ -67,7 +67,118 @@ function pct(numerator: number, denominator: number, digits = 2) {
     return `${((numerator / denominator) * 100).toFixed(digits)}%`;
 }
 
+// --- i18n ---
+type Lang = "en" | "zh";
+const STRINGS: Record<Lang, Record<string, string>> = {
+    en: {
+        startDate: "Start date",
+        endDate: "End date",
+        to: "to",
+        apply: "Apply",
+        searchPlaceholder: "Search (optional)",
+        search: "Search",
+        addRecord: "Add Record",
+        exportCsv: "Export CSV",
+        exportXlsx: "Export Excel",
+        showing: "Showing",
+        of: "of",
+        date: "Date",
+        toggleSort: "Toggle sort",
+        joint: "Joint Complication",
+        motor: "Motor Dysfunction",
+        trauma: "Trauma Complication",
+        ankle: "Ankle Complication",
+        pediatric: "Pediatric Adverse Event",
+        spinal: "Spinal Complication",
+        hand: "Hand Surgery Complication",
+        obstetric: "Obstetric Adverse Event",
+        gyn: "Gynecological Adverse Event",
+        surgical: "Surgical Treatment",
+        delete: "Delete",
+        totals: "(Σ)",
+        visits: "visits",
+        totalXOfSum: "Total {{x}} / tableThreeSumNumber",
+        otherVisits: "Other Visits",
+        vsOther: "vs Other Visits",
+        dialogTitle: "New entry",
+        create: "Create",
+        placeholderJoint: "Joint Complication Count",
+        placeholderMotor: "Motor Dysfunction Count",
+        placeholderTrauma: "Trauma Complication Count",
+        placeholderAnkle: "Ankle Complication Count",
+        placeholderPediatric: "Pediatric Adverse Event Count",
+        placeholderSpinal: "Spinal Complication Count",
+        placeholderHand: "Hand Surgery Complication Count",
+        placeholderObstetric: "Obstetric Adverse Event Count",
+        placeholderGyn: "Gynecological Adverse Event Count",
+        placeholderSurgical: "Surgical Treatment Count",
+        noEntries: "No entries found.",
+        page: "Page",
+        prev: "Prev",
+        next: "Next",
+    },
+    zh: {
+        startDate: "开始日期",
+        endDate: "结束日期",
+        to: "至",
+        apply: "应用",
+        searchPlaceholder: "搜索（可选）",
+        search: "搜索",
+        addRecord: "新增记录",
+        exportCsv: "导出 CSV",
+        exportXlsx: "导出 Excel",
+        showing: "显示",
+        of: "共",
+        date: "日期",
+        toggleSort: "切换排序",
+        joint: "关节并发症",
+        motor: "运动功能障碍",
+        trauma: "创伤并发症",
+        ankle: "踝关节并发症",
+        pediatric: "儿科不良事件",
+        spinal: "脊柱并发症",
+        hand: "手外科并发症",
+        obstetric: "产科不良事件",
+        gyn: "妇科不良事件",
+        surgical: "外科治疗",
+        delete: "删除",
+        totals: "（合计）",
+        visits: "次",
+        totalXOfSum: "总{{x}} / 总数",
+        otherVisits: "其他",
+        vsOther: "与其他对比",
+        dialogTitle: "新建条目",
+        create: "创建",
+        placeholderJoint: "关节并发症数量",
+        placeholderMotor: "运动功能障碍数量",
+        placeholderTrauma: "创伤并发症数量",
+        placeholderAnkle: "踝关节并发症数量",
+        placeholderPediatric: "儿科不良事件数量",
+        placeholderSpinal: "脊柱并发症数量",
+        placeholderHand: "手外科并发症数量",
+        placeholderObstetric: "产科不良事件数量",
+        placeholderGyn: "妇科不良事件数量",
+        placeholderSurgical: "外科治疗数量",
+        noEntries: "暂无数据。",
+        page: "第",
+        prev: "上一页",
+        next: "下一页",
+    },
+};
+
+function useI18n() {
+    const [lang, setLang] = useState<Lang>("en");
+    const t = (key: string, vars?: Record<string, string | number>) => {
+        const raw = STRINGS[lang][key] ?? key;
+        if (!vars) return raw;
+        return Object.keys(vars).reduce((s, k) => s.replaceAll(`{{${k}}}`, String(vars[k])), raw);
+    };
+    return { lang, setLang, t };
+}
+
 export default function TableThree() {
+    const { lang, setLang, t } = useI18n();
+
     const [items, setItems] = useState<Row[]>([]);
     const [total, setTotal] = useState(0);
     const [sums, setSums] = useState<Sums>({
@@ -207,7 +318,7 @@ export default function TableThree() {
     const filtered = useMemo(() => {
         const base = (() => {
             if (!q) return items;
-            const t = q.toLowerCase();
+            const tLower = q.toLowerCase();
             return items.filter((r) => {
                 const fields = [
                     r.numOfJointComplicationCount,
@@ -223,7 +334,7 @@ export default function TableThree() {
                     r.date ? new Date(r.date).toLocaleDateString() : "",
                     new Date(r.createdAt ?? "").toLocaleDateString(),
                 ].map((v) => (v == null ? "" : String(v).toLowerCase()));
-                return fields.some((f) => f.includes(t));
+                return fields.some((f) => f.includes(tLower));
             });
         })();
 
@@ -289,50 +400,75 @@ export default function TableThree() {
     const totalNumOfSurgicalTreatmentCountPct = pct(totalNumOfSurgicalTreatmentCount, tableThreeSumNumber);
     const totalNumOfSurgicalTreatmentCountPctOther = Math.max(0, tableThreeSumNumber - totalNumOfSurgicalTreatmentCount);
 
+    // translate chart labels
+    const L = {
+        joint: t("joint"),
+        motor: t("motor"),
+        trauma: t("trauma"),
+        ankle: t("ankle"),
+        pediatric: t("pediatric"),
+        spinal: t("spinal"),
+        hand: t("hand"),
+        obstetric: t("obstetric"),
+        gyn: t("gyn"),
+        surgical: t("surgical"),
+        otherVisits: t("otherVisits"),
+    };
+
     const jointComplicationCountPie = [
-        { name: "Joint Complication Count", value: totalNumOfJointComplicationCount },
-        { name: "Other Visits", value: totalNumOfJointComplicationCountPctOther },
+        { name: L.joint, value: totalNumOfJointComplicationCount },
+        { name: L.otherVisits, value: totalNumOfJointComplicationCountPctOther },
     ];
     const motorDysfunctionCountPie = [
-        { name: "Motor Dysfunction Count", value: totalNumOfMotorDysfunctionCount },
-        { name: "Other Visits", value: totalNumOfMotorDysfunctionCountPctOther },
+        { name: L.motor, value: totalNumOfMotorDysfunctionCount },
+        { name: L.otherVisits, value: totalNumOfMotorDysfunctionCountPctOther },
     ];
     const traumaComplicationCountPie = [
-        { name: "Trauma Complication Count", value: totalNumOfTraumaComplicationCount },
-        { name: "Other Visits", value: totalNumOfTraumaComplicationCountPctOther },
+        { name: L.trauma, value: totalNumOfTraumaComplicationCount },
+        { name: L.otherVisits, value: totalNumOfTraumaComplicationCountPctOther },
     ];
     const ankleComplicationCountPie = [
-        { name: "Ankle Complication Count", value: totalNumOfAnkleComplicationCount },
-        { name: "Other Visits", value: totalNumOfAnkleComplicationCountPctOther },
+        { name: L.ankle, value: totalNumOfAnkleComplicationCount },
+        { name: L.otherVisits, value: totalNumOfAnkleComplicationCountPctOther },
     ];
     const pediatricAdverseEventCountPie = [
-        { name: "Pediatric Adverse Event Count", value: totalNumOfPediatricAdverseEventCount },
-        { name: "Other Visits", value: totalNumOfPediatricAdverseEventCountPctOther },
+        { name: L.pediatric, value: totalNumOfPediatricAdverseEventCount },
+        { name: L.otherVisits, value: totalNumOfPediatricAdverseEventCountPctOther },
     ];
     const spinalComplicationCountPie = [
-        { name: "Spinal Complication Count", value: totalNumOfSpinalComplicationCount },
-        { name: "Other Visits", value: totalNumOfSpinalComplicationCountPctOther },
+        { name: L.spinal, value: totalNumOfSpinalComplicationCount },
+        { name: L.otherVisits, value: totalNumOfSpinalComplicationCountPctOther },
     ];
     const handSurgeryComplicationCountPie = [
-        { name: "Hand Surgery Complication Count", value: totalNumOfHandSurgeryComplicationCount },
-        { name: "Other Visits", value: totalNumOfHandSurgeryComplicationCountPctOther },
+        { name: L.hand, value: totalNumOfHandSurgeryComplicationCount },
+        { name: L.otherVisits, value: totalNumOfHandSurgeryComplicationCountPctOther },
     ];
     const obstetricAdverseEventCountPie = [
-        { name: "Obstetric Adverse Event Count", value: totalNumOfObstetricAdverseEventCount },
-        { name: "Other Visits", value: totalNumOfObstetricAdverseEventCountPctOther },
+        { name: L.obstetric, value: totalNumOfObstetricAdverseEventCount },
+        { name: L.otherVisits, value: totalNumOfObstetricAdverseEventCountPctOther },
     ];
     const gynecologicalAdverseEventCountPie = [
-        { name: "Gynecological Adverse Event Count", value: totalNumOfGynecologicalAdverseEventCount },
-        { name: "Other Visits", value: totalNumOfGynecologicalAdverseEventCountPctOther },
+        { name: L.gyn, value: totalNumOfGynecologicalAdverseEventCount },
+        { name: L.otherVisits, value: totalNumOfGynecologicalAdverseEventCountPctOther },
     ];
     const surgicalTreatmentCountPie = [
-        { name: "Surgical Treatment Count", value: totalNumOfSurgicalTreatmentCount },
-        { name: "Other Visits", value: totalNumOfSurgicalTreatmentCountPctOther },
+        { name: L.surgical, value: totalNumOfSurgicalTreatmentCount },
+        { name: L.otherVisits, value: totalNumOfSurgicalTreatmentCountPctOther },
     ];
 
-    const COLORS_A = ["#4F46E5", "#CBD5E1"];
-    const COLORS_B = ["#06B6D4", "#CBD5E1"];
-    const COLORS_C = ["#10B981", "#CBD5E1"];
+    const OTHER_COLOR = "#E5E7EB";
+    const CHART_COLORS: string[] = [
+        "#2563EB", // 1 Joint - blue
+        "#10B981", // 2 Motor - emerald
+        "#F59E0B", // 3 Trauma - amber
+        "#EF4444", // 4 Ankle - red
+        "#8B5CF6", // 5 Pediatric - violet
+        "#06B6D4", // 6 Spinal - cyan
+        "#84CC16", // 7 Hand - lime
+        "#F97316", // 8 Obstetric - orange
+        "#EC4899", // 9 Gyn - pink
+        "#14B8A6", // 10 Surgical - teal
+    ];
 
     // -------- Frontend-only export helpers ----------
     async function fetchAllRowsForRange() {
@@ -455,48 +591,59 @@ export default function TableThree() {
         <div className="space-y-4">
             {/* Controls */}
             <div className="flex flex-wrap items-center gap-2">
+                {/* Language toggle */}
+                <Button
+                    variant="outline"
+                    onClick={() => setLang((l) => (l === "en" ? "zh" : "en"))}
+                    className="mr-2"
+                    aria-label="Toggle language"
+                    title={lang === "en" ? "切换到中文" : "Switch to English"}
+                >
+                    {lang === "en" ? "中文" : "EN"}
+                </Button>
+
                 <Input
                     type="date"
                     value={from}
                     onChange={(e) => setFrom(e.target.value)}
                     className="w-44"
-                    aria-label="Start date"
+                    aria-label={t("startDate")}
                 />
-                <span className="text-gray-500">to</span>
+                <span className="text-gray-500">{t("to")}</span>
                 <Input
                     type="date"
                     value={to}
                     onChange={(e) => setTo(e.target.value)}
                     className="w-44"
-                    aria-label="End date"
+                    aria-label={t("endDate")}
                 />
                 <Button onClick={applyDates} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                    Apply
+                    {t("apply")}
                 </Button>
 
                 <Input
-                    placeholder="Search (optional)"
+                    placeholder={t("searchPlaceholder")}
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                     className="w-64"
                 />
                 <Button onClick={runSearch} variant="secondary" className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                    Search
+                    {t("search")}
                 </Button>
 
                 <Button onClick={() => setOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                    Add Record
+                    {t("addRecord")}
                 </Button>
 
                 <Button onClick={exportCsv} variant="secondary" className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                    Export CSV
+                    {t("exportCsv")}
                 </Button>
                 <Button onClick={exportXlsx} variant="secondary" className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                    Export Excel
+                    {t("exportXlsx")}
                 </Button>
 
                 <div className="ml-auto text-sm text-gray-600">
-                    Showing {showingFrom}–{showingTo} of {total}
+                    {t("showing")} {showingFrom}–{showingTo} {t("of")} {total}
                 </div>
             </div>
 
@@ -509,20 +656,20 @@ export default function TableThree() {
                             className="py-2 px-3 cursor-pointer select-none"
                             onClick={() => setDateSort((s) => (s === "asc" ? "desc" : "asc"))}
                             aria-sort={dateSort === "asc" ? "ascending" : "descending"}
-                            title="Toggle sort"
+                            title={t("toggleSort")}
                         >
-                            Date {dateSort === "asc" ? "▲" : "▼"}
+                            {t("date")} {dateSort === "asc" ? "▲" : "▼"}
                         </th>
-                        <th className="px-3">Joint Complication</th>
-                        <th className="px-3">Motor Dysfunction</th>
-                        <th className="px-3">Trauma Complication</th>
-                        <th className="px-3">Ankle Complication</th>
-                        <th className="px-3">Pediatric Adverse Event</th>
-                        <th className="px-3">Spinal Complication</th>
-                        <th className="px-3">HandSurgery Complication</th>
-                        <th className="px-3">Obstetric Adverse Event</th>
-                        <th className="px-3">Gynecological Adverse Event</th>
-                        <th className="px-3">Surgical Treatment</th>
+                        <th className="px-3">{t("joint")}</th>
+                        <th className="px-3">{t("motor")}</th>
+                        <th className="px-3">{t("trauma")}</th>
+                        <th className="px-3">{t("ankle")}</th>
+                        <th className="px-3">{t("pediatric")}</th>
+                        <th className="px-3">{t("spinal")}</th>
+                        <th className="px-3">{t("hand")}</th>
+                        <th className="px-3">{t("obstetric")}</th>
+                        <th className="px-3">{t("gyn")}</th>
+                        <th className="px-3">{t("surgical")}</th>
                         <th className="px-3 w-32"></th>
                     </tr>
                     </thead>
@@ -546,7 +693,7 @@ export default function TableThree() {
                             <td className="px-3">{r.numOfSurgicalTreatmentCount ?? "-"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
-                                    Delete
+                                    {t("delete")}
                                 </Button>
                             </td>
                         </tr>
@@ -554,7 +701,7 @@ export default function TableThree() {
                     {filtered.length === 0 && (
                         <tr>
                             <td colSpan={12} className="py-10 text-center text-gray-500">
-                                No entries found.
+                                {t("noEntries")}
                             </td>
                         </tr>
                     )}
@@ -565,7 +712,7 @@ export default function TableThree() {
             {/* Pagination (right after table) */}
             <div className="flex items-center justify-between mt-2">
                 <div className="text-sm text-gray-600">
-                    Page {page} / {totalPages}
+                    {t("page")} {page} / {totalPages}
                 </div>
                 <div className="flex gap-2">
                     <Button
@@ -573,14 +720,14 @@ export default function TableThree() {
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page <= 1}
                     >
-                        Prev
+                        {t("prev")}
                     </Button>
                     <Button
                         variant="secondary"
                         onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                         disabled={page >= totalPages}
                     >
-                        Next
+                        {t("next")}
                     </Button>
                 </div>
             </div>
@@ -588,61 +735,61 @@ export default function TableThree() {
             {/* Totals */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Joint Complication Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("joint")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfJointComplicationCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Motor Dysfunction Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("motor")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfMotorDysfunctionCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Trauma Complication Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("trauma")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfTraumaComplicationCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Ankle Complication Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("ankle")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfAnkleComplicationCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Pediatric Adverse Event Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("pediatric")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfPediatricAdverseEventCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Spinal Complication Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("spinal")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfSpinalComplicationCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">HandSurgery Complication Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("hand")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfHandSurgeryComplicationCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Obstetric Adverse Event Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("obstetric")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfObstetricAdverseEventCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Gynecological Adverse Event Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("gyn")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfGynecologicalAdverseEventCount}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Surgical Treatment Count (Σ)</div>
+                    <div className="text-xs text-gray-500">{t("surgical")} {t("totals")}</div>
                     <div className="text-2xl font-semibold">
                         {sums.numOfSurgicalTreatmentCount}
                     </div>
@@ -652,80 +799,100 @@ export default function TableThree() {
             {/* Percentage text */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Joint Complication Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("joint") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfJointComplicationCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfJointComplicationCount} / {tableThreeSumNumber} visits
+                        {totalNumOfJointComplicationCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Motor Dysfunction Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("motor") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfMotorDysfunctionCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfMotorDysfunctionCount} / {tableThreeSumNumber} visits
+                        {totalNumOfMotorDysfunctionCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Trauma Complication Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("trauma") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfTraumaComplicationCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfTraumaComplicationCount} / {tableThreeSumNumber} visits
+                        {totalNumOfTraumaComplicationCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Ankle Complication Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("ankle") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfAnkleComplicationCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfAnkleComplicationCount} / {tableThreeSumNumber} visits
+                        {totalNumOfAnkleComplicationCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Pediatric Adverse Event Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("pediatric") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfPediatricAdverseEventCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfPediatricAdverseEventCount} / {tableThreeSumNumber} visits
+                        {totalNumOfPediatricAdverseEventCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Spinal Complication Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("spinal") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfSpinalComplicationCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfSpinalComplicationCount} / {tableThreeSumNumber} visits
+                        {totalNumOfSpinalComplicationCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Hand Surgery Complication Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("hand") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfHandSurgeryComplicationCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfHandSurgeryComplicationCount} / {tableThreeSumNumber} visits
+                        {totalNumOfHandSurgeryComplicationCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Obstetric Adverse Event Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("obstetric") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfObstetricAdverseEventCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfObstetricAdverseEventCount} / {tableThreeSumNumber} visits
+                        {totalNumOfObstetricAdverseEventCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Gynecological Adverse Event Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("gyn") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfGynecologicalAdverseEventCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfGynecologicalAdverseEventCount} / {tableThreeSumNumber} visits
+                        {totalNumOfGynecologicalAdverseEventCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-xs text-gray-500">Total Surgical Treatment Count / tableThreeSumNumber</div>
+                    <div className="text-xs text-gray-500">
+                        {t("totalXOfSum", { x: t("surgical") })}
+                    </div>
                     <div className="text-2xl font-semibold">{totalNumOfSurgicalTreatmentCountPct}</div>
                     <div className="text-xs text-gray-500 mt-1">
-                        {totalNumOfSurgicalTreatmentCount} / {tableThreeSumNumber} visits
+                        {totalNumOfSurgicalTreatmentCount} / {tableThreeSumNumber} {t("visits")}
                     </div>
                 </div>
             </div>
@@ -734,7 +901,7 @@ export default function TableThree() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                 {/* Joint vs Other */}
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-sm font-medium mb-3">Joint Complication Count vs Other Visits</div>
+                    <div className="text-sm font-medium mb-3">{t("joint")} {t("vsOther")}</div>
                     <div className="w-full h-64">
                         <ResponsiveContainer>
                             <PieChart>
@@ -747,7 +914,7 @@ export default function TableThree() {
                                     paddingAngle={1}
                                 >
                                     {jointComplicationCountPie.map((_, i) => (
-                                        <Cell key={`adv-${i}`} fill={COLORS_A[i % COLORS_A.length]} />
+                                        <Cell key={`joint-${i}`} fill={i === 0 ? CHART_COLORS[0] : OTHER_COLOR} />
                                     ))}
                                 </Pie>
                                 <Tooltip formatter={(v: any) => [v, "Count"]} />
@@ -756,13 +923,13 @@ export default function TableThree() {
                         </ResponsiveContainer>
                     </div>
                     <div className="text-xs text-gray-500 mt-2">
-                        {totalNumOfJointComplicationCount} of {tableThreeSumNumber} visits ({totalNumOfJointComplicationCountPct})
+                        {totalNumOfJointComplicationCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfJointComplicationCountPct})
                     </div>
                 </div>
 
                 {/* Motor vs Other */}
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-sm font-medium mb-3">Motor Dysfunction Count vs Other Visits</div>
+                    <div className="text-sm font-medium mb-3">{t("motor")} {t("vsOther")}</div>
                     <div className="w-full h-64">
                         <ResponsiveContainer>
                             <PieChart>
@@ -775,7 +942,7 @@ export default function TableThree() {
                                     paddingAngle={1}
                                 >
                                     {motorDysfunctionCountPie.map((_, i) => (
-                                        <Cell key={`inad-${i}`} fill={COLORS_B[i % COLORS_B.length]} />
+                                        <Cell key={`motor-${i}`} fill={i === 0 ? CHART_COLORS[1] : OTHER_COLOR} />
                                     ))}
                                 </Pie>
                                 <Tooltip formatter={(v: any) => [v, "Count"]} />
@@ -784,13 +951,13 @@ export default function TableThree() {
                         </ResponsiveContainer>
                     </div>
                     <div className="text-xs text-gray-500 mt-2">
-                        {totalNumOfMotorDysfunctionCount} of {tableThreeSumNumber} visits ({totalNumOfMotorDysfunctionCountPct})
+                        {totalNumOfMotorDysfunctionCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfMotorDysfunctionCountPct})
                     </div>
                 </div>
 
                 {/* Trauma vs Other */}
                 <div className="bg-white rounded-xl shadow-sm border p-4">
-                    <div className="text-sm font-medium mb-3">Trauma Complication Count vs Other Visits</div>
+                    <div className="text-sm font-medium mb-3">{t("trauma")} {t("vsOther")}</div>
                     <div className="w-full h-64">
                         <ResponsiveContainer>
                             <PieChart>
@@ -803,7 +970,7 @@ export default function TableThree() {
                                     paddingAngle={1}
                                 >
                                     {traumaComplicationCountPie.map((_, i) => (
-                                        <Cell key={`post-${i}`} fill={COLORS_C[i % COLORS_C.length]} />
+                                        <Cell key={`trauma-${i}`} fill={i === 0 ? CHART_COLORS[2] : OTHER_COLOR} />
                                     ))}
                                 </Pie>
                                 <Tooltip formatter={(v: any) => [v, "Count"]} />
@@ -812,203 +979,204 @@ export default function TableThree() {
                         </ResponsiveContainer>
                     </div>
                     <div className="text-xs text-gray-500 mt-2">
-                        {totalNumOfTraumaComplicationCount} of {tableThreeSumNumber} visits ({totalNumOfTraumaComplicationCountPct})
+                        {totalNumOfTraumaComplicationCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfTraumaComplicationCountPct})
                     </div>
                 </div>
 
-            {/* AnkleComplicationCount Pie*/}
-            <div className="bg-white rounded-xl shadow-sm border p-4">
-                <div className="text-sm font-medium mb-3">Ankle Complication Count vs Other Visits</div>
-                <div className="w-full h-64">
-                    <ResponsiveContainer>
-                        <PieChart>
-                            <Pie
-                                data={ankleComplicationCountPie}
-                                dataKey="value"
-                                nameKey="name"
-                                outerRadius={95}
-                                innerRadius={45}
-                                paddingAngle={1}
-                            >
-                                {ankleComplicationCountPie.map((_, i) => (
-                                    <Cell key={`post-${i}`} fill={COLORS_C[i % COLORS_C.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip formatter={(v: any) => [v, "Count"]} />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                {/* Ankle */}
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <div className="text-sm font-medium mb-3">{t("ankle")} {t("vsOther")}</div>
+                    <div className="w-full h-64">
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={ankleComplicationCountPie}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    outerRadius={95}
+                                    innerRadius={45}
+                                    paddingAngle={1}
+                                >
+                                    {ankleComplicationCountPie.map((_, i) => (
+                                        <Cell key={`ankle-${i}`} fill={i === 0 ? CHART_COLORS[3] : OTHER_COLOR} />
+                                    ))}
+                                </Pie>
+                                <Tooltip formatter={(v: any) => [v, "Count"]} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">
+                        {totalNumOfAnkleComplicationCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfAnkleComplicationCountPct})
+                    </div>
                 </div>
-                <div className="text-xs text-gray-500 mt-2">
-                    {totalNumOfAnkleComplicationCount} of {tableThreeSumNumber} visits ({totalNumOfAnkleComplicationCountPct})
-                </div>
-            </div>
 
-            {/* Pediatric vs Other */}
-            <div className="bg-white rounded-xl shadow-sm border p-4">
-                <div className="text-sm font-medium mb-3">Pediatric Adverse Event Count vs Other Visits</div>
-                <div className="w-full h-64">
-                    <ResponsiveContainer>
-                        <PieChart>
-                            <Pie
-                                data={pediatricAdverseEventCountPie}
-                                dataKey="value"
-                                nameKey="name"
-                                outerRadius={95}
-                                innerRadius={45}
-                                paddingAngle={1}
-                            >
-                                {pediatricAdverseEventCountPie.map((_, i) => (
-                                    <Cell key={`post-${i}`} fill={COLORS_C[i % COLORS_C.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip formatter={(v: any) => [v, "Count"]} />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                {/* Pediatric */}
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <div className="text-sm font-medium mb-3">{t("pediatric")} {t("vsOther")}</div>
+                    <div className="w-full h-64">
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={pediatricAdverseEventCountPie}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    outerRadius={95}
+                                    innerRadius={45}
+                                    paddingAngle={1}
+                                >
+                                    {pediatricAdverseEventCountPie.map((_, i) => (
+                                        <Cell key={`pediatric-${i}`} fill={i === 0 ? CHART_COLORS[4] : OTHER_COLOR} />
+                                    ))}
+                                </Pie>
+                                <Tooltip formatter={(v: any) => [v, "Count"]} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">
+                        {totalNumOfPediatricAdverseEventCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfPediatricAdverseEventCountPct})
+                    </div>
                 </div>
-                <div className="text-xs text-gray-500 mt-2">
-                    {totalNumOfPediatricAdverseEventCount} of {tableThreeSumNumber} visits ({totalNumOfPediatricAdverseEventCountPct})
-                </div>
-            </div>
 
-            {/* Spinal vs Other */}
-            <div className="bg-white rounded-xl shadow-sm border p-4">
-                <div className="text-sm font-medium mb-3">Spinal Complication Count vs Other Visits</div>
-                <div className="w-full h-64">
-                    <ResponsiveContainer>
-                        <PieChart>
-                            <Pie
-                                data={spinalComplicationCountPie}
-                                dataKey="value"
-                                nameKey="name"
-                                outerRadius={95}
-                                innerRadius={45}
-                                paddingAngle={1}
-                            >
-                                {spinalComplicationCountPie.map((_, i) => (
-                                    <Cell key={`post-${i}`} fill={COLORS_C[i % COLORS_C.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip formatter={(v: any) => [v, "Count"]} />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                {/* Spinal */}
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <div className="text-sm font-medium mb-3">{t("spinal")} {t("vsOther")}</div>
+                    <div className="w-full h-64">
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={spinalComplicationCountPie}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    outerRadius={95}
+                                    innerRadius={45}
+                                    paddingAngle={1}
+                                >
+                                    {spinalComplicationCountPie.map((_, i) => (
+                                        <Cell key={`spinal-${i}`} fill={i === 0 ? CHART_COLORS[5] : OTHER_COLOR} />
+                                    ))}
+                                </Pie>
+                                <Tooltip formatter={(v: any) => [v, "Count"]} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">
+                        {totalNumOfSpinalComplicationCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfSpinalComplicationCountPct})
+                    </div>
                 </div>
-                <div className="text-xs text-gray-500 mt-2">
-                    {totalNumOfSpinalComplicationCount} of {tableThreeSumNumber} visits ({totalNumOfSpinalComplicationCountPct})
-                </div>
-            </div>
 
-            {/* Hand Surgery vs Other */}
-            <div className="bg-white rounded-xl shadow-sm border p-4">
-                <div className="text-sm font-medium mb-3">Hand Surgery Complication Count vs Other Visits</div>
-                <div className="w-full h-64">
-                    <ResponsiveContainer>
-                        <PieChart>
-                            <Pie
-                                data={handSurgeryComplicationCountPie}
-                                dataKey="value"
-                                nameKey="name"
-                                outerRadius={95}
-                                innerRadius={45}
-                                paddingAngle={1}
-                            >
-                                {handSurgeryComplicationCountPie.map((_, i) => (
-                                    <Cell key={`post-${i}`} fill={COLORS_C[i % COLORS_C.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip formatter={(v: any) => [v, "Count"]} />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                {/* Hand */}
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <div className="text-sm font-medium mb-3">{t("hand")} {t("vsOther")}</div>
+                    <div className="w-full h-64">
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={handSurgeryComplicationCountPie}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    outerRadius={95}
+                                    innerRadius={45}
+                                    paddingAngle={1}
+                                >
+                                    {handSurgeryComplicationCountPie.map((_, i) => (
+                                        <Cell key={`hand-${i}`} fill={i === 0 ? CHART_COLORS[6] : OTHER_COLOR} />
+                                    ))}
+                                </Pie>
+                                <Tooltip formatter={(v: any) => [v, "Count"]} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">
+                        {totalNumOfHandSurgeryComplicationCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfHandSurgeryComplicationCountPct})
+                    </div>
                 </div>
-                <div className="text-xs text-gray-500 mt-2">
-                    {totalNumOfHandSurgeryComplicationCount} of {tableThreeSumNumber} visits ({totalNumOfHandSurgeryComplicationCountPct})
-                </div>
-            </div>
 
-            {/* Obstetric vs Other */}
-            <div className="bg-white rounded-xl shadow-sm border p-4">
-                <div className="text-sm font-medium mb-3">Obstetric Adverse Event Count vs Other Visits</div>
-                <div className="w-full h-64">
-                    <ResponsiveContainer>
-                        <PieChart>
-                            <Pie
-                                data={obstetricAdverseEventCountPie}
-                                dataKey="value"
-                                nameKey="name"
-                                outerRadius={95}
-                                innerRadius={45}
-                                paddingAngle={1}
-                            >
-                                {obstetricAdverseEventCountPie.map((_, i) => (
-                                    <Cell key={`post-${i}`} fill={COLORS_C[i % COLORS_C.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip formatter={(v: any) => [v, "Count"]} />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                {/* Obstetric */}
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <div className="text-sm font-medium mb-3">{t("obstetric")} {t("vsOther")}</div>
+                    <div className="w-full h-64">
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={obstetricAdverseEventCountPie}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    outerRadius={95}
+                                    innerRadius={45}
+                                    paddingAngle={1}
+                                >
+                                    {obstetricAdverseEventCountPie.map((_, i) => (
+                                        <Cell key={`obstetric-${i}`} fill={i === 0 ? CHART_COLORS[7] : OTHER_COLOR} />
+                                    ))}
+                                </Pie>
+                                <Tooltip formatter={(v: any) => [v, "Count"]} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">
+                        {totalNumOfObstetricAdverseEventCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfObstetricAdverseEventCountPct})
+                    </div>
                 </div>
-                <div className="text-xs text-gray-500 mt-2">
-                    {totalNumOfObstetricAdverseEventCount} of {tableThreeSumNumber} visits ({totalNumOfObstetricAdverseEventCountPct})
-                </div>
-            </div>
 
-            {/* Gynecological vs Other */}
-            <div className="bg-white rounded-xl shadow-sm border p-4">
-                <div className="text-sm font-medium mb-3">Gynecological Adverse Event Count vs Other Visits</div>
-                <div className="w-full h-64">
-                    <ResponsiveContainer>
-                        <PieChart>
-                            <Pie
-                                data={gynecologicalAdverseEventCountPie}
-                                dataKey="value"
-                                nameKey="name"
-                                outerRadius={95}
-                                innerRadius={45}
-                                paddingAngle={1}
-                            >
-                                {gynecologicalAdverseEventCountPie.map((_, i) => (
-                                    <Cell key={`post-${i}`} fill={COLORS_C[i % COLORS_C.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip formatter={(v: any) => [v, "Count"]} />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
+                {/* Gyn */}
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <div className="text-sm font-medium mb-3">{t("gyn")} {t("vsOther")}</div>
+                    <div className="w-full h-64">
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={gynecologicalAdverseEventCountPie}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    outerRadius={95}
+                                    innerRadius={45}
+                                    paddingAngle={1}
+                                >
+                                    {gynecologicalAdverseEventCountPie.map((_, i) => (
+                                        <Cell key={`gyn-${i}`} fill={i === 0 ? CHART_COLORS[8] : OTHER_COLOR} />
+                                    ))}
+                                </Pie>
+                                <Tooltip formatter={(v: any) => [v, "Count"]} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">
+                        {totalNumOfGynecologicalAdverseEventCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfGynecologicalAdverseEventCountPct})
+                    </div>
                 </div>
-                <div className="text-xs text-gray-500 mt-2">
-                    {totalNumOfGynecologicalAdverseEventCount} of {tableThreeSumNumber} visits ({totalNumOfGynecologicalAdverseEventCountPct})
-                </div>
-            </div>
 
-            {/* Surgical Treatment vs Other */}
-            <div className="bg-white rounded-xl shadow-sm border p-4">
-                <div className="text-sm font-medium mb-3">Surgical Treatment Count vs Other Visits</div>
-                <div className="w-full h-64">
-                    <ResponsiveContainer>
-                        <PieChart>
-                            <Pie
-                                data={surgicalTreatmentCountPie}
-                                dataKey="value"
-                                nameKey="name"
-                                outerRadius={95}
-                                innerRadius={45}
-                                paddingAngle={1}
-                            >
-                                {surgicalTreatmentCountPie.map((_, i) => (
-                                    <Cell key={`post-${i}`} fill={COLORS_C[i % COLORS_C.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip formatter={(v: any) => [v, "Count"]} />
-                            <Legend />
-                        </PieChart>
-                    </ResponsiveContainer>
-                </div>
-                <div className="text-xs text-gray-500 mt-2">
-                    {totalNumOfSurgicalTreatmentCount} of {tableThreeSumNumber} visits ({totalNumOfSurgicalTreatmentCountPct})
+                {/* Surgical */}
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <div className="text-sm font-medium mb-3">{t("surgical")} {t("vsOther")}</div>
+                    <div className="w-full h-64">
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={surgicalTreatmentCountPie}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    outerRadius={95}
+                                    innerRadius={45}
+                                    paddingAngle={1}
+                                >
+                                    {surgicalTreatmentCountPie.map((_, i) => (
+                                        <Cell key={`surgical-${i}`} fill={i === 0 ? CHART_COLORS[9] : OTHER_COLOR} />
+                                    ))}
+                                </Pie>
+                                <Tooltip formatter={(v: any) => [v, "Count"]} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">
+                        {totalNumOfSurgicalTreatmentCount} {t("of")} {tableThreeSumNumber} {t("visits")} ({totalNumOfSurgicalTreatmentCountPct})
+                    </div>
                 </div>
             </div>
 
@@ -1016,7 +1184,7 @@ export default function TableThree() {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="bg-white/100 backdrop-blur-none">
                     <DialogHeader>
-                        <DialogTitle>New entry</DialogTitle>
+                        <DialogTitle>{t("dialogTitle")}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-2">
                         <Input
@@ -1026,7 +1194,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Joint Complication Count"
+                            placeholder={t("placeholderJoint")}
                             value={form.numOfJointComplicationCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfJointComplicationCount: e.target.value })
@@ -1034,7 +1202,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Motor Dysfunction Count"
+                            placeholder={t("placeholderMotor")}
                             value={form.numOfMotorDysfunctionCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfMotorDysfunctionCount: e.target.value })
@@ -1042,7 +1210,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Trauma Complication Count"
+                            placeholder={t("placeholderTrauma")}
                             value={form.numOfTraumaComplicationCount}
                             onChange={(e) =>
                                 setForm({
@@ -1053,7 +1221,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Ankle Complication Count"
+                            placeholder={t("placeholderAnkle")}
                             value={form.numOfAnkleComplicationCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfAnkleComplicationCount: e.target.value })
@@ -1061,7 +1229,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Pediatric Adverse Event Count"
+                            placeholder={t("placeholderPediatric")}
                             value={form.numOfPediatricAdverseEventCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfPediatricAdverseEventCount: e.target.value })
@@ -1069,7 +1237,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Spinal Complication Count"
+                            placeholder={t("placeholderSpinal")}
                             value={form.numOfSpinalComplicationCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfSpinalComplicationCount: e.target.value })
@@ -1077,7 +1245,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Hand Surgery Complication Count"
+                            placeholder={t("placeholderHand")}
                             value={form.numOfHandSurgeryComplicationCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfHandSurgeryComplicationCount: e.target.value })
@@ -1085,7 +1253,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Obstetric Adverse Event Count"
+                            placeholder={t("placeholderObstetric")}
                             value={form.numOfObstetricAdverseEventCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfObstetricAdverseEventCount: e.target.value })
@@ -1093,7 +1261,7 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Gynecological Adverse Event Count"
+                            placeholder={t("placeholderGyn")}
                             value={form.numOfGynecologicalAdverseEventCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfGynecologicalAdverseEventCount: e.target.value })
@@ -1101,19 +1269,18 @@ export default function TableThree() {
                         />
                         <Input
                             type="number"
-                            placeholder="Surgical Treatment Count"
+                            placeholder={t("placeholderSurgical")}
                             value={form.numOfSurgicalTreatmentCount}
                             onChange={(e) =>
                                 setForm({ ...form, numOfSurgicalTreatmentCount: e.target.value })
                             }
                         />
                         <Button onClick={create} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                            Create
+                            {t("create")}
                         </Button>
                     </div>
                 </DialogContent>
             </Dialog>
-        </div>
         </div>
     );
 }

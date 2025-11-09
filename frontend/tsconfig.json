@@ -7,8 +7,11 @@
     "strict": true,
     "moduleResolution": "bundler",
     "baseUrl": ".",
-    "paths": { "@/*": ["src/*"] },           // <-- add this
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["node", "vite/client"],
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }
