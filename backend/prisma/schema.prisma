@@ -14,15 +14,16 @@ datasource db {
 }
 
 model User {
-  id                Int                      @id @default(autoincrement())
-  email             String                   @unique
-  name              String
-  password          String
-  createdAt         DateTime                 @default(now())
-  updatedAt         DateTime                 @updatedAt
-  records           AfterSurgeryRecord[]
-  tableOneEntries   AfterSurgeryTableOne[] // <-- add this back-reference
-  tableThreeEntries AfterSurgeryTableThree[]
+  id                    Int                      @id @default(autoincrement())
+  email                 String                   @unique
+  name                  String
+  password              String
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+  records               AfterSurgeryRecord[]
+  tableOneEntries       AfterSurgeryTableOne[] // <-- add this back-reference
+  tableThreeEntries     AfterSurgeryTableThree[]
+  AfterSurgeryTableFour AfterSurgeryTableFour[]
 }
 
 model AfterSurgeryRecord {
@@ -71,4 +72,18 @@ model AfterSurgeryTableThree {
   numOfGynecologicalAdverseEventCount Int?
   numOfSurgicalTreatmentCount         Int?
   createdAt                           DateTime @default(now())
+}
+
+model AfterSurgeryTableFour {
+  id                    Int      @id @default(autoincrement())
+  user                  User     @relation(fields: [userId], references: [id])
+  userId                Int
+  date                  DateTime @default(now())
+  numOfFormulationOne   Int?
+  numOfFormulationTwo   Int?
+  numOfFormulationThree Int?
+  numOfFormulationFour  Int?
+  numOfFormulationFive  Int?
+  numOfFormulationSix   Int?
+  createdAt             DateTime @default(now())
 }

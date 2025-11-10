@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth';
 import { tableOne } from './routes/tableOne'; // ← named import matches your file
 import { tableThree} from "./routes/tableThree";
+import { tableFour} from "./routes/tableFour";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -29,6 +30,7 @@ app.get('/health', (_req, res) => res.json({ ok: true }));
 app.use('/auth', authRouter);
 app.use('/table-one', tableOne);
 app.use('/table-three', tableThree); // ← mount your router here
+app.use('/table-four', tableFour);
 
 // 404 fallback
 app.use((_req, res) => res.status(404).json({ error: 'Not Found' }));
