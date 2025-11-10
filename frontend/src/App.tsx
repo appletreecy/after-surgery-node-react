@@ -32,10 +32,9 @@ export default function App() {
                     {/* Right: Nav + User */}
                     <div className="flex items-center gap-6">
                         <nav className="flex items-center gap-5 text-sm">
-                            <a href="/" className={isActive("/")}>Dashboard</a>
-                            <a href="/records" className={isActive("/records")}>Records</a>
                             <a href="/table-one" className={isActive("/table-one")}>Table One</a>
                             <a href="/table-three" className={isActive("/table-three")}>Table Three</a>
+                            <a href="/table-four" className={isActive("/table-four")}>Table Four</a>
                         </nav>
 
                         <div className="flex items-center gap-3">

@@ -5,8 +5,10 @@ add tableThree 100%
 
 deploy to linode using github actions 100%
 
-change the tableThree to Eng/Chi toggle func
+change the tableThree to Eng/Chi toggle func done
 
-need to look into the tableThree piechart color issues
+need to look into the tableThree piechart color issues done
 
-merge the change to main branch
+merge the change to main branch done
+
+working on talbeTwo and understand the current setup of tableThree
