@@ -7,6 +7,7 @@ import authRouter from './routes/auth';
 import { tableOne } from './routes/tableOne'; // ← named import matches your file
 import { tableThree} from "./routes/tableThree";
 import { tableFour} from "./routes/tableFour";
+import { tableFive} from "./routes/tableFive";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -31,6 +32,7 @@ app.use('/auth', authRouter);
 app.use('/table-one', tableOne);
 app.use('/table-three', tableThree); // ← mount your router here
 app.use('/table-four', tableFour);
+app.use('/table-five', tableFive);
 
 // 404 fallback
 app.use((_req, res) => res.status(404).json({ error: 'Not Found' }));

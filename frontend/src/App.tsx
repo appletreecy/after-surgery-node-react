@@ -1,7 +1,15 @@
-import { Outlet, Navigate, useLocation } from "react-router-dom";
+import { Outlet, Navigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuSeparator,
+    DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 
 export default function App() {
     const { user, setUser, loading } = useAuth();
@@ -20,9 +28,21 @@ export default function App() {
             ? "text-indigo-600 font-medium"
             : "text-gray-600 hover:text-gray-900";
 
+    // ✅ Label generator (with "Table - " prefix)
+    function currentTableLabel(pathname: string) {
+        if (pathname.startsWith("/table-one")) return "Table - Table One";
+        if (pathname.startsWith("/table-three")) return "Table - Table Three";
+        if (pathname.startsWith("/table-four")) return "Table - Table Four";
+        if (pathname.startsWith("/table-five")) return "Table - Table Five";
+        return "Table - Tables";
+    }
+
+    const label = currentTableLabel(location.pathname);
+
     return (
         <div className="min-h-screen w-full bg-[rgb(var(--background))]">
-            <header className="w-full bg-white/90 border-b backdrop-blur">
+            {/* Solid header */}
+            <header className="w-full bg-white border-b">
                 <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3">
                     {/* Left: Product title */}
                     <h1 className="text-xl font-semibold text-gray-900">
@@ -31,12 +51,51 @@ export default function App() {
 
                     {/* Right: Nav + User */}
                     <div className="flex items-center gap-6">
-                        <nav className="flex items-center gap-5 text-sm">
-                            <a href="/table-one" className={isActive("/table-one")}>Table One</a>
-                            <a href="/table-three" className={isActive("/table-three")}>Table Three</a>
-                            <a href="/table-four" className={isActive("/table-four")}>Table Four</a>
+                        {/* Dropdown Navigation */}
+                        <nav className="flex items-center gap-3 text-sm">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="min-w-[12rem] justify-between">
+                                        {label}
+                                        <svg aria-hidden="true" viewBox="0 0 20 20" className="ml-2 h-4 w-4">
+                                            <path d="M5.25 7.5L10 12.25L14.75 7.5H5.25Z" />
+                                        </svg>
+                                    </Button>
+                                </DropdownMenuTrigger>
+
+                                {/* Solid dropdown background, now 75% width of the trigger */}
+                                <DropdownMenuContent
+                                    align="start"
+                                    className="w-[75%] max-w-[12rem] bg-white shadow-lg border border-gray-200"
+                                >
+                                    <DropdownMenuLabel>Tables</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-one" className={isActive("/table-one")}>
+                                            Table One
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-three" className={isActive("/table-three")}>
+                                            Table Three
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-four" className={isActive("/table-four")}>
+                                            Table Four
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-five" className={isActive("/table-five")}>
+                                            Table Five
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
                         </nav>
 
+                        {/* User Info + Logout */}
                         <div className="flex items-center gap-3">
               <span className="text-sm text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full">
                 {user.name}

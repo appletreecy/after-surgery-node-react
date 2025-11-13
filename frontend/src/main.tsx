@@ -13,6 +13,7 @@ import NotFound from './pages/NotFound.tsx'
 import TableOne from "@/pages/TableOne";
 import TableThree from "@/pages/TableThree";
 import TableFour from "@/pages/TableFour";
+import TableFive from "@/pages/tableFive";
 
 
 const router = createBrowserRouter([
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
             { path: 'table-one', element: <TableOne/>},
             { path: 'table-three', element: <TableThree/>},
             { path: 'table-four', element: <TableFour/>},
+            { path: 'table-five', element: <TableFive/>},
         ]},
     { path: '/login', element: <Login/> },
     { path: '/register', element: <Register/> },
