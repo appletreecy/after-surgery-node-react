@@ -24,6 +24,7 @@ model User {
   tableOneEntries       AfterSurgeryTableOne[] // <-- add this back-reference
   tableThreeEntries     AfterSurgeryTableThree[]
   AfterSurgeryTableFour AfterSurgeryTableFour[]
+  AfterSurgeryTableFive AfterSurgeryTableFive[]
 }
 
 model AfterSurgeryRecord {
@@ -86,4 +87,17 @@ model AfterSurgeryTableFour {
   numOfFormulationFive  Int?
   numOfFormulationSix   Int?
   createdAt             DateTime @default(now())
+}
+
+model AfterSurgeryTableFive {
+  id                                        Int      @id @default(autoincrement())
+  user                                      User     @relation(fields: [userId], references: [id])
+  userId                                    Int
+  date                                      DateTime @default(now())
+  criticalPatientsName                      String?  @db.VarChar(255)
+  numberOfCriticalRescueCases               Int?
+  numberOfDeaths                            Int?
+  numberOfFollowUpsForCriticallyIllPatients Int?
+  visitFindingsForCriticalPatient           String?  @db.VarChar(255)
+  createdAt                                 DateTime @default(now())
 }
