@@ -40,30 +40,37 @@ export default function App() {
     const label = currentTableLabel(location.pathname);
 
     return (
-        <div className="min-h-screen w-full bg-[rgb(var(--background))]">
+        <div className="min-h-screen w-full bg-[rgb(var(--background))] overflow-x-hidden">
             {/* Solid header */}
             <header className="w-full bg-white border-b">
-                <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3">
+                <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-2 sm:gap-6 px-6 py-3">
                     {/* Left: Product title */}
                     <h1 className="text-xl font-semibold text-gray-900">
                         After Surgery Dashboard
                     </h1>
 
                     {/* Right: Nav + User */}
-                    <div className="flex items-center gap-6">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-6 w-full sm:w-auto">
                         {/* Dropdown Navigation */}
-                        <nav className="flex items-center gap-3 text-sm">
+                        <nav className="flex flex-wrap items-center gap-3 text-sm w-full sm:w-auto">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="min-w-[12rem] justify-between">
+                                    <Button
+                                        variant="outline"
+                                        className="w-full sm:w-auto min-w-0 sm:min-w-[12rem] justify-between"
+                                    >
                                         {label}
-                                        <svg aria-hidden="true" viewBox="0 0 20 20" className="ml-2 h-4 w-4">
+                                        <svg
+                                            aria-hidden="true"
+                                            viewBox="0 0 20 20"
+                                            className="ml-2 h-4 w-4"
+                                        >
                                             <path d="M5.25 7.5L10 12.25L14.75 7.5H5.25Z" />
                                         </svg>
                                     </Button>
                                 </DropdownMenuTrigger>
 
-                                {/* Solid dropdown background, now 75% width of the trigger */}
+                                {/* Solid dropdown background */}
                                 <DropdownMenuContent
                                     align="start"
                                     className="w-[75%] max-w-[12rem] bg-white shadow-lg border border-gray-200"
@@ -92,11 +99,10 @@ export default function App() {
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-
                         </nav>
 
                         {/* User Info + Logout */}
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto sm:justify-end">
               <span className="text-sm text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full">
                 {user.name}
               </span>
