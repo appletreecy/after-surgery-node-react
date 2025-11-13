@@ -42,7 +42,7 @@ export default function App() {
     return (
         <div className="min-h-screen w-full bg-[rgb(var(--background))]">
             {/* Solid header */}
-            <header className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-2 sm:gap-6 px-6 py-3">
+            <header className="w-full bg-white border-b">
                 <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3">
                     {/* Left: Product title */}
                     <h1 className="text-xl font-semibold text-gray-900">
