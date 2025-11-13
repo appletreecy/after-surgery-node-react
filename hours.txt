@@ -1,4 +1,4 @@
-21
+23
 
 
 add tableThree 100%
@@ -11,4 +11,8 @@ need to look into the tableThree piechart color issues done
 
 merge the change to main branch done
 
-working on talbeTwo and understand the current setup of tableThree
+working on talbeTwo and understand the current setup of tableThree -- done
+
+working on tableFour
+
+Then working on the big table which combine tableOne two threee four five together...
