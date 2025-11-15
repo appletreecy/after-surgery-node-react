@@ -33,7 +33,7 @@ type JoinedRow = {
     numOfProlongedAnestheticRecovery: number | null;
     numOfPunctureSiteAbnormality: number | null;
     numOfTourniquetReaction: number | null;
-    otherComments: string | null; // <-- tableTwo string column
+    otherComments: string | null; // tableTwo string column
 
     // ----- tableThree -----
     numOfJointComplicationCount: number | null;
@@ -56,15 +56,15 @@ type JoinedRow = {
     numOfFormulationSix: number | null;
 
     // ----- tableFive -----
-    criticalPatientsName: string | null;                // <-- tableFive string
-    visitFindingsForCriticalPatient: string | null;     // <-- tableFive string
+    criticalPatientsName: string | null;
+    visitFindingsForCriticalPatient: string | null;
     numberOfCriticalRescueCases: number | null;
     numberOfDeaths: number | null;
     numberOfFollowUpsForCriticallyIllPatients: number | null;
 };
 
 /**
- * GET /api/table-joined
+ * GET /table-joined
  *
  * Query:
  *  - from?: YYYY-MM-DD
@@ -117,14 +117,15 @@ tableJoined.get("/", requireAuth, async (req, res) => {
 
     try {
         // --- total row count ---
-        const totalRows = await prisma.$queryRawUnsafe<{ count: bigint }[]>(
+        const totalRows = (await prisma.$queryRawUnsafe(
             `SELECT COUNT(*) AS count FROM afterSurgeryJoined ${whereSql}`,
             ...params
-        );
+        )) as { count: bigint }[];
+
         const total = Number(totalRows[0]?.count ?? 0);
 
         // --- paged items (ALL columns from the view) ---
-        const items = await prisma.$queryRawUnsafe<JoinedRow[]>(
+        const items = (await prisma.$queryRawUnsafe(
             `
             SELECT *
             FROM afterSurgeryJoined
@@ -135,7 +136,7 @@ tableJoined.get("/", requireAuth, async (req, res) => {
             ...params,
             _pageSize,
             offset
-        );
+        )) as JoinedRow[];
 
         res.json({
             total,
