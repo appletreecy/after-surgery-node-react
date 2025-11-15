@@ -1,4 +1,4 @@
-23
+24
 
 
 add tableThree 100%
@@ -13,6 +13,6 @@ merge the change to main branch done
 
 working on talbeTwo and understand the current setup of tableThree -- done
 
-working on tableFour
+working on tableFour 60%
 
 Then working on the big table which combine tableOne two threee four five together...

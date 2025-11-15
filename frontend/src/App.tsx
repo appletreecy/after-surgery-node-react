@@ -83,6 +83,11 @@ export default function App() {
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
+                                        <Link to="/table-two" className={isActive("/table-two")}>
+                                            Table Two
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
                                         <Link to="/table-three" className={isActive("/table-three")}>
                                             Table Three
                                         </Link>
