@@ -15,6 +15,7 @@ import TableTwo from "@/pages/TableTwo";
 import TableThree from "@/pages/TableThree";
 import TableFour from "@/pages/TableFour";
 import TableFive from "@/pages/tableFive";
+import TableJoined from "@/pages/TableJoined";
 
 
 const router = createBrowserRouter([
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
             { path: 'table-three', element: <TableThree/>},
             { path: 'table-four', element: <TableFour/>},
             { path: 'table-five', element: <TableFive/>},
+            { path: 'table-joined', element: <TableJoined/>},
         ]},
     { path: '/login', element: <Login/> },
     { path: '/register', element: <Register/> },

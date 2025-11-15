@@ -53,6 +53,9 @@ export default function App() {
                     <div className="flex flex-wrap items-center gap-2 sm:gap-6 w-full sm:w-auto">
                         {/* Dropdown Navigation */}
                         <nav className="flex flex-wrap items-center gap-3 text-sm w-full sm:w-auto">
+                            <Link to="/table-joined" className={isActive("/table-joined")}>
+                                Big Table
+                            </Link>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button
