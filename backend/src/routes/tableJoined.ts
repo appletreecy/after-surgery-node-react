@@ -5,7 +5,7 @@ import { requireAuth } from "../middleware/auth";
 export const tableJoined = Router();
 
 /**
- * One row from the afterSurgeryJoined view.
+ * One row from the AfterSurgeryJoined view.
  * Joined by (userId, date) across all 5 tables.
  */
 type JoinedRow = {
@@ -75,7 +75,7 @@ type JoinedRow = {
  *
  * Default behavior: last 30 days.
  *
- * Data source: MySQL VIEW `afterSurgeryJoined`.
+ * Data source: MySQL VIEW `AfterSurgeryJoined`.
  */
 tableJoined.get("/", requireAuth, async (req, res) => {
     const { from, to, since, page = "1", pageSize = "20" } = req.query as Record<
@@ -118,7 +118,7 @@ tableJoined.get("/", requireAuth, async (req, res) => {
     try {
         // --- total row count ---
         const totalRows = (await prisma.$queryRawUnsafe(
-            `SELECT COUNT(*) AS count FROM afterSurgeryJoined ${whereSql}`,
+            `SELECT COUNT(*) AS count FROM AfterSurgeryJoined ${whereSql}`,
             ...params
         )) as { count: bigint }[];
 
@@ -128,7 +128,7 @@ tableJoined.get("/", requireAuth, async (req, res) => {
         const items = (await prisma.$queryRawUnsafe(
             `
             SELECT *
-            FROM afterSurgeryJoined
+            FROM AfterSurgeryJoined
             ${whereSql}
             ORDER BY date DESC
             LIMIT ? OFFSET ?
