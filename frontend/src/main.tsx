@@ -11,6 +11,7 @@ import Records from './pages/Records'
 // @ts-ignore
 import NotFound from './pages/NotFound.tsx'
 import TableOne from "@/pages/TableOne";
+import TableTwo from "@/pages/TableTwo";
 import TableThree from "@/pages/TableThree";
 import TableFour from "@/pages/TableFour";
 import TableFive from "@/pages/tableFive";
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
             { index: true, element: <TableOne/> },
             { path: 'records', element: <Records/> },
             { path: 'table-one', element: <TableOne/>},
+            { path: 'table-two', element: <TableTwo/>},
             { path: 'table-three', element: <TableThree/>},
             { path: 'table-four', element: <TableFour/>},
             { path: 'table-five', element: <TableFive/>},
