@@ -8,6 +8,7 @@ import { tableOne } from './routes/tableOne'; // ← named import matches your f
 import { tableThree} from "./routes/tableThree";
 import { tableFour} from "./routes/tableFour";
 import { tableFive} from "./routes/tableFive";
+import { tableTwo} from "./routes/tableTwo";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -30,6 +31,7 @@ app.get('/health', (_req, res) => res.json({ ok: true }));
 // IMPORTANT: backend has no /api prefix (Nginx strips /api/)
 app.use('/auth', authRouter);
 app.use('/table-one', tableOne);
+app.use('/table-two', tableTwo);
 app.use('/table-three', tableThree); // ← mount your router here
 app.use('/table-four', tableFour);
 app.use('/table-five', tableFive);

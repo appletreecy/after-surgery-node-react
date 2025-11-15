@@ -25,6 +25,7 @@ model User {
   tableThreeEntries     AfterSurgeryTableThree[]
   AfterSurgeryTableFour AfterSurgeryTableFour[]
   AfterSurgeryTableFive AfterSurgeryTableFive[]
+  AfterSurgeryTableTwo  AfterSurgeryTableTwo[]
 }
 
 model AfterSurgeryRecord {
@@ -55,6 +56,29 @@ model AfterSurgeryTableOne {
   numOfPostoperativeAnalgesiaCases Int?
   numOfPostoperativeVisits         Int?
   createdAt                        DateTime @default(now())
+}
+
+model AfterSurgeryTableTwo {
+  id                                    Int      @id @default(autoincrement())
+  user                                  User     @relation(fields: [userId], references: [id])
+  userId                                Int
+  date                                  DateTime @default(now())
+  numOfAbdominalDistension              Int?
+  numOfAllergicRash                     Int?
+  numOfChestDiscomfort                  Int?
+  numOfDelirium                         Int?
+  numOfDizziness                        Int?
+  numOfEndotrachealIntubationDiscomfort Int?
+  numOfEpigastricPain                   Int?
+  numOfItching                          Int?
+  numOfNauseaAndVomiting                Int?
+  numOfNauseaAndVomitingAndDizziness    Int?
+  numOfOther                            Int?
+  numOfProlongedAnestheticRecovery      Int?
+  numOfPunctureSiteAbnormality          Int?
+  numOfTourniquetReaction               Int?
+  otherComments                         String?  @db.VarChar(255)
+  createdAt                             DateTime @default(now())
 }
 
 model AfterSurgeryTableThree {
