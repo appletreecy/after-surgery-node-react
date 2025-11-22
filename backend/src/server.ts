@@ -1,23 +1,21 @@
-// backend/src/server.ts
+// src/server.ts
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import jwt from "jsonwebtoken";
+
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@as-integrations/express4";
+import { ApolloServerPluginLandingPageDisabled } from "@apollo/server/plugin/disabled";
 
 import authRouter from "./routes/auth";
 import { tableOne } from "./routes/tableOne";
+import { tableTwo } from "./routes/tableTwo";
 import { tableThree } from "./routes/tableThree";
 import { tableFour } from "./routes/tableFour";
 import { tableFive } from "./routes/tableFive";
-import { tableTwo } from "./routes/tableTwo";
 import { tableJoined } from "./routes/tableJoined";
-
-import { requireAuth } from "./middleware/auth";
-
-// 🔷 Apollo Server 5 + Express integration
-import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@as-integrations/express4";
-import { json as bodyParserJson } from "body-parser";
 
 import {
     tableOneMonthlyTypeDefs,
@@ -28,16 +26,15 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const NODE_ENV = process.env.NODE_ENV || "development";
 
+// -----------------------------
+// Core middleware
+// -----------------------------
 app.use(express.json());
 app.use(cookieParser());
-
-// =====================
-// 🚀 Request Logging
-// =====================
 app.use(morgan("dev"));
 
-// Dev CORS only; prod is same-origin via Nginx
-if (NODE_ENV === "development") {
+// CORS for REST
+if (NODE_ENV !== "production") {
     app.use(
         cors({
             origin: "http://localhost:5173",
@@ -46,13 +43,9 @@ if (NODE_ENV === "development") {
     );
 }
 
-// Trust proxy for secure cookies behind Nginx/HTTPS
-app.set("trust proxy", 1);
-
-// Health
-app.get("/health", (_req, res) => res.json({ ok: true }));
-
-// IMPORTANT: backend has no /api prefix (Nginx strips /api/)
+// -----------------------------
+// REST routes
+// -----------------------------
 app.use("/auth", authRouter);
 app.use("/table-one", tableOne);
 app.use("/table-two", tableTwo);
@@ -61,59 +54,89 @@ app.use("/table-four", tableFour);
 app.use("/table-five", tableFive);
 app.use("/table-joined", tableJoined);
 
-// =====================
-// 🔷 GraphQL setup
-// =====================
+// -----------------------------
+// GraphQL setup (/graphql)
+// -----------------------------
 
-// Root stub type so we can "extend type Query" elsewhere
-const rootTypeDefs = `#graphql
-  type Query {
-    _empty: String
-  }
-`;
+// Small helper for decoding JWT from cookies for GraphQL
+interface JwtPayload {
+    id: number;
+    email?: string;
+}
 
-const typeDefs = [
-    rootTypeDefs,
-    tableOneMonthlyTypeDefs, // later: add tableTwoMonthlyTypeDefs etc
-];
+async function startApollo() {
+    const baseTypeDefs = /* GraphQL */ `
+    type Query {
+      _health: String!
+    }
+  `;
 
-const resolvers = [
-    tableOneMonthlyResolvers, // later: add tableTwoMonthlyResolvers etc
-];
+    const typeDefs = `
+    ${baseTypeDefs}
+    ${tableOneMonthlyTypeDefs}
+  `;
 
-async function start() {
-    // Create Apollo Server (Apollo v5)
-    const apollo = new ApolloServer({
+    const resolvers = {
+        Query: {
+            _health: () => "ok",
+            ...tableOneMonthlyResolvers.Query,
+        },
+    };
+
+    const server = new ApolloServer({
         typeDefs,
         resolvers,
+        plugins:
+            NODE_ENV === "production"
+                ? [ApolloServerPluginLandingPageDisabled()]
+                : [],
     });
 
-    await apollo.start();
+    await server.start();
 
-    // /graphql uses same auth model as REST
+    // Dedicated CORS for /graphql (must allow cookies)
     app.use(
         "/graphql",
-        requireAuth,
-        bodyParserJson(),
-        expressMiddleware(apollo, {
+        cors<cors.CorsRequest>({
+            origin:
+                NODE_ENV === "production"
+                    ? "https://aftersurgerytwo.scaocoding.com"
+                    : "http://localhost:5173",
+            credentials: true,
+        }),
+        express.json(),
+        expressMiddleware(server, {
             context: async ({ req }) => {
-                // requireAuth has attached user to req
-                return { user: (req as any).user };
+                // Read JWT from cookie
+                const cookies = (req as any).cookies as Record<string, string> | undefined;
+                const token = cookies?.access_token ?? cookies?.token;
+
+                let user: { id: number } | undefined;
+
+                if (token && process.env.JWT_SECRET) {
+                    try {
+                        const decoded = jwt.verify(
+                            token,
+                            process.env.JWT_SECRET
+                        ) as JwtPayload;
+                        user = { id: decoded.id };
+                    } catch (err) {
+                        console.warn("[GraphQL] Invalid JWT on /graphql", err);
+                    }
+                }
+
+                // This becomes ctx.user in your resolvers
+                return { user };
             },
         })
     );
 
-    // 404 fallback (AFTER all routes, including /graphql)
-    app.use((_req, res) => res.status(404).json({ error: "Not Found" }));
-
     app.listen(PORT, () => {
         console.log(`API running on http://localhost:${PORT} (${NODE_ENV})`);
-        console.log(`GraphQL endpoint at http://localhost:${PORT}/graphql`);
     });
 }
 
-// Start async server
-start().catch((err) => {
-    console.error("Failed to start server:", err);
+startApollo().catch((err) => {
+    console.error("Error starting Apollo Server:", err);
     process.exit(1);
 });
