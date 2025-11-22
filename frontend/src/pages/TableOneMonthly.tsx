@@ -3,6 +3,18 @@ import { useMemo, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+    ResponsiveContainer,
+    LineChart,
+    Line,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+} from "recharts";
 
 // ---------- GraphQL ----------
 const TABLE_ONE_MONTHLY = gql`
@@ -54,6 +66,8 @@ const STRINGS: Record<Lang, Record<string, string>> = {
         loading: "Loading…",
         error: "Failed to load monthly data.",
         rows: "rows",
+        lineChartTitle: "Monthly Trend (Line Chart)",
+        barChartTitle: "Monthly Totals (Bar Chart)",
     },
     zh: {
         title: "表一 – 月度汇总",
@@ -71,6 +85,8 @@ const STRINGS: Record<Lang, Record<string, string>> = {
         loading: "加载中…",
         error: "加载月度数据失败。",
         rows: "行",
+        lineChartTitle: "月度趋势（折线图）",
+        barChartTitle: "月度总数（柱状图）",
     },
 };
 
@@ -287,7 +303,10 @@ export default function TableOneMonthly() {
                     ))}
                     {rows.length === 0 && !loading && (
                         <tr>
-                            <td colSpan={5} className="py-10 text-center text-gray-500">
+                            <td
+                                colSpan={5}
+                                className="py-10 text-center text-gray-500"
+                            >
                                 {t("noEntries")}
                             </td>
                         </tr>
@@ -316,6 +335,94 @@ export default function TableOneMonthly() {
                     )}
                 </table>
             </div>
+
+            {/* Line Chart (under table) */}
+            {rows.length > 0 && (
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <h2 className="text-sm font-semibold mb-2">
+                        {t("lineChartTitle")}
+                    </h2>
+                    <div className="h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={rows}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line
+                                    type="monotone"
+                                    dataKey="numOfAdverseReactionCases"
+                                    name={t("adverse")}
+                                    stroke="#8884d8"
+                                    dot={false}
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="numOfInadequateAnalgesia"
+                                    name={t("inadequate")}
+                                    stroke="#82ca9d"
+                                    dot={false}
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="numOfPostoperativeAnalgesiaCases"
+                                    name={t("postopAnalgesia")}
+                                    stroke="#ff7300"
+                                    dot={false}
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="numOfPostoperativeVisits"
+                                    name={t("visits")}
+                                    stroke="#413ea0"
+                                    dot={false}
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            )}
+
+            {/* Bar Chart (under line chart) */}
+            {rows.length > 0 && (
+                <div className="bg-white rounded-xl shadow-sm border p-4">
+                    <h2 className="text-sm font-semibold mb-2">
+                        {t("barChartTitle")}
+                    </h2>
+                    <div className="h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={rows}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar
+                                    dataKey="numOfAdverseReactionCases"
+                                    name={t("adverse")}
+                                    fill="#8884d8"
+                                />
+                                <Bar
+                                    dataKey="numOfInadequateAnalgesia"
+                                    name={t("inadequate")}
+                                    fill="#82ca9d"
+                                />
+                                <Bar
+                                    dataKey="numOfPostoperativeAnalgesiaCases"
+                                    name={t("postopAnalgesia")}
+                                    fill="#ff7300"
+                                />
+                                <Bar
+                                    dataKey="numOfPostoperativeVisits"
+                                    name={t("visits")}
+                                    fill="#413ea0"
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
