@@ -25,6 +25,7 @@ import TableFour from "@/pages/TableFour";
 import TableFive from "@/pages/tableFive";
 import TableJoined from "@/pages/TableJoined";
 import TableOneMonthly from "@/pages/TableOneMonthly";
+import TableThreeMonthly from "@/pages/TableThreeMonthly";
 
 // Apollo Client
 const httpLink = new HttpLink({
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
             { path: "records", element: <Records /> },
             { path: "table-one", element: <TableOne /> },
             { path: "table-one-monthly", element: <TableOneMonthly /> },
+            { path: "table-three-monthly", element: <TableThreeMonthly /> },
             { path: "table-two", element: <TableTwo /> },
             { path: "table-three", element: <TableThree /> },
             { path: "table-four", element: <TableFour /> },
