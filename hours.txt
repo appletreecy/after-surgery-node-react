@@ -1,4 +1,4 @@
-30
+34
 
 
 add tableThree 100%
@@ -16,3 +16,8 @@ working on talbeTwo and understand the current setup of tableThree -- done
 working on tableFour 60%
 
 Then working on the big table which combine tableOne two threee four five together...
+
+
+working on the table one monthly - graphql 100 done
+
+working on the table three monthly - graphql 100% done

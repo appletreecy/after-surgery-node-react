@@ -22,6 +22,8 @@ import {
     tableOneMonthlyResolvers,
 } from "./graphql/tableOneMonthly";
 
+import { tableThreeMonthlyTypeDefs, tableThreeMonthlyResolvers } from "./graphql/tableThreeMonthly";
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -74,12 +76,14 @@ async function startApollo() {
     const typeDefs = `
     ${baseTypeDefs}
     ${tableOneMonthlyTypeDefs}
+    ${tableThreeMonthlyTypeDefs}
   `;
 
     const resolvers = {
         Query: {
             _health: () => "ok",
             ...tableOneMonthlyResolvers.Query,
+            ...tableThreeMonthlyResolvers.Query,
         },
     };
 
