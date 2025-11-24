@@ -22,6 +22,7 @@ import {
     tableOneMonthlyResolvers,
 } from "./graphql/tableOneMonthly";
 
+import {tableTwoMonthlyTypeDefs, tableTwoMonthlyResolvers} from "./graphql/tableTwoMonthly";
 import { tableThreeMonthlyTypeDefs, tableThreeMonthlyResolvers } from "./graphql/tableThreeMonthly";
 
 const app = express();
@@ -76,6 +77,7 @@ async function startApollo() {
     const typeDefs = `
     ${baseTypeDefs}
     ${tableOneMonthlyTypeDefs}
+    ${tableTwoMonthlyTypeDefs}
     ${tableThreeMonthlyTypeDefs}
   `;
 
@@ -83,6 +85,7 @@ async function startApollo() {
         Query: {
             _health: () => "ok",
             ...tableOneMonthlyResolvers.Query,
+            ...tableTwoMonthlyResolvers.Query,
             ...tableThreeMonthlyResolvers.Query,
         },
     };
