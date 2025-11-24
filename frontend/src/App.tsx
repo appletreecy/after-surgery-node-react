@@ -39,7 +39,8 @@ export default function App() {
 
     function currentTableLabelMonthly(pathname: string) {
         if (pathname.startsWith("/table-one-monthly")) return "Table - Table One Monthly";
-        if (pathname.startsWith("/table-three")) return "Table - Table Three";
+        if (pathname.startsWith("/table-two-monthly")) return "Table - Table Two Monthly";
+        if (pathname.startsWith("/table-three-monthly")) return "Table - Table Three Monthly";
         if (pathname.startsWith("/table-four")) return "Table - Table Four";
         if (pathname.startsWith("/table-five")) return "Table - Table Five";
         return "Table Monthly - Tables";
