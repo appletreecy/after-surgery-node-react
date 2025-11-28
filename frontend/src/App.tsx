@@ -41,7 +41,7 @@ export default function App() {
         if (pathname.startsWith("/table-one-monthly")) return "Table - Table One Monthly";
         if (pathname.startsWith("/table-two-monthly")) return "Table - Table Two Monthly";
         if (pathname.startsWith("/table-three-monthly")) return "Table - Table Three Monthly";
-        if (pathname.startsWith("/table-four")) return "Table - Table Four";
+        if (pathname.startsWith("/table-four-monthly")) return "Table - Table Four Monthly";
         if (pathname.startsWith("/table-five")) return "Table - Table Five";
         return "Table Monthly - Tables";
     }
@@ -107,8 +107,8 @@ export default function App() {
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
-                                        <Link to="/table-four" className={isActive("/table-four")}>
-                                            Table Four
+                                        <Link to="/table-four-monthly" className={isActive("/table-four-monthly")}>
+                                            Table Four Monthly
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
