@@ -112,8 +112,8 @@ export default function App() {
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
-                                        <Link to="/table-five" className={isActive("/table-five")}>
-                                            Table Five
+                                        <Link to="/table-five-monthly" className={isActive("/table-five-monthly")}>
+                                            Table Five Monthly
                                         </Link>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

@@ -16,16 +16,13 @@ import {
 } from "recharts";
 
 // ---------- GraphQL ----------
-const TABLE_FOUR_MONTHLY = gql`
-  query TableFourMonthly($year: Int!) {
-    tableFourMonthly(year: $year) {
+const TABLE_FIVE_MONTHLY = gql`
+  query TableFiveMonthly($year: Int!) {
+    tableFiveMonthly(year: $year) {
       month
-      numOfFormulationOne
-      numOfFormulationTwo
-      numOfFormulationThree
-      numOfFormulationFour
-      numOfFormulationFive
-      numOfFormulationSix
+      numberOfCriticalRescueCases
+      numberOfDeaths
+      numberOfFollowUpsForCriticallyIllPatients
     }
   }
 `;
@@ -33,19 +30,16 @@ const TABLE_FOUR_MONTHLY = gql`
 // ---------- Types ----------
 type MonthlyRow = {
     month: string;
-    numOfFormulationOne: number;
-    numOfFormulationTwo: number;
-    numOfFormulationThree: number;
-    numOfFormulationFour: number;
-    numOfFormulationFive: number;
-    numOfFormulationSix: number;
+    numberOfCriticalRescueCases: number;
+    numberOfDeaths: number;
+    numberOfFollowUpsForCriticallyIllPatients: number;
 };
 
-type TableFourMonthlyData = {
-    tableFourMonthly: MonthlyRow[];
+type TableFiveMonthlyData = {
+    tableFiveMonthly: MonthlyRow[];
 };
 
-type TableFourMonthlyVars = {
+type TableFiveMonthlyVars = {
     year: number;
 };
 
@@ -60,12 +54,9 @@ const STRINGS: Record<Lang, Record<string, string>> = {
         exportCsv: "Export CSV",
         exportXlsx: "Export Excel",
         month: "Month",
-        formulationOne: "Formulation One",
-        formulationTwo: "Formulation Two",
-        formulationThree: "Formulation Three",
-        formulationFour: "Formulation Four",
-        formulationFive: "Formulation Five",
-        formulationSix: "Formulation Six",
+        rescueCases: "Critical Rescue Cases",
+        deaths: "Deaths",
+        followUps: "Follow-ups (Critical Patients)",
         totals: "(Σ)",
         noEntries: "No monthly data.",
         loading: "Loading…",
@@ -81,12 +72,9 @@ const STRINGS: Record<Lang, Record<string, string>> = {
         exportCsv: "导出 CSV",
         exportXlsx: "导出 Excel",
         month: "月份",
-        formulationOne: "配方一",
-        formulationTwo: "配方二",
-        formulationThree: "配方三",
-        formulationFour: "配方四",
-        formulationFive: "配方五",
-        formulationSix: "配方六",
+        rescueCases: "危重抢救例数",
+        deaths: "死亡人数",
+        followUps: "危重病人随访数",
         totals: "（合计）",
         noEntries: "暂无月度数据。",
         loading: "加载中…",
@@ -112,48 +100,27 @@ function FormulationLegend({ t }: { t: (key: string) => string }) {
                     className="inline-block w-3 h-3 rounded-sm"
                     style={{ backgroundColor: "#2563EB" }}
                 />
-                <span>{t("formulationOne")}</span>
+                <span>{t("rescueCases")}</span>
             </div>
             <div className="flex items-center gap-1">
                 <span
                     className="inline-block w-3 h-3 rounded-sm"
                     style={{ backgroundColor: "#10B981" }}
                 />
-                <span>{t("formulationTwo")}</span>
+                <span>{t("deaths")}</span>
             </div>
             <div className="flex items-center gap-1">
                 <span
                     className="inline-block w-3 h-3 rounded-sm"
                     style={{ backgroundColor: "#F59E0B" }}
                 />
-                <span>{t("formulationThree")}</span>
-            </div>
-            <div className="flex items-center gap-1">
-                <span
-                    className="inline-block w-3 h-3 rounded-sm"
-                    style={{ backgroundColor: "#EF4444" }}
-                />
-                <span>{t("formulationFour")}</span>
-            </div>
-            <div className="flex items-center gap-1">
-                <span
-                    className="inline-block w-3 h-3 rounded-sm"
-                    style={{ backgroundColor: "#8B5CF6" }}
-                />
-                <span>{t("formulationFive")}</span>
-            </div>
-            <div className="flex items-center gap-1">
-                <span
-                    className="inline-block w-3 h-3 rounded-sm"
-                    style={{ backgroundColor: "#06B6D4" }}
-                />
-                <span>{t("formulationSix")}</span>
+                <span>{t("followUps")}</span>
             </div>
         </div>
     );
 }
 
-export default function TableFourMonthly() {
+export default function TableFiveMonthly() {
     const { lang, setLang, t } = useI18n();
 
     const currentYear = new Date().getFullYear();
@@ -165,32 +132,26 @@ export default function TableFourMonthly() {
     }, [yearInput, currentYear]);
 
     const { data, loading, error, refetch } = useQuery<
-        TableFourMonthlyData,
-        TableFourMonthlyVars
-    >(TABLE_FOUR_MONTHLY, {
+        TableFiveMonthlyData,
+        TableFiveMonthlyVars
+    >(TABLE_FIVE_MONTHLY, {
         variables: { year },
     });
 
-    const rows: MonthlyRow[] = data?.tableFourMonthly ?? [];
+    const rows: MonthlyRow[] = data?.tableFiveMonthly ?? [];
 
     const totals = useMemo(() => {
         return rows.reduce(
             (acc, r) => {
-                acc.numOfFormulationOne += r.numOfFormulationOne;
-                acc.numOfFormulationTwo += r.numOfFormulationTwo;
-                acc.numOfFormulationThree += r.numOfFormulationThree;
-                acc.numOfFormulationFour += r.numOfFormulationFour;
-                acc.numOfFormulationFive += r.numOfFormulationFive;
-                acc.numOfFormulationSix += r.numOfFormulationSix;
+                acc.numberOfCriticalRescueCases += r.numberOfCriticalRescueCases;
+                acc.numberOfDeaths += r.numberOfDeaths;
+                acc.numberOfFollowUpsForCriticallyIllPatients += r.numberOfFollowUpsForCriticallyIllPatients;
                 return acc;
             },
             {
-                numOfFormulationOne: 0,
-                numOfFormulationTwo: 0,
-                numOfFormulationThree: 0,
-                numOfFormulationFour: 0,
-                numOfFormulationFive: 0,
-                numOfFormulationSix: 0,
+                numberOfCriticalRescueCases: 0,
+                numberOfDeaths: 0,
+                numberOfFollowUpsForCriticallyIllPatients: 0,
             }
         );
     }, [rows]);
@@ -207,12 +168,9 @@ export default function TableFourMonthly() {
 
         const header = [
             "month",
-            "numOfFormulationOne",
-            "numOfFormulationTwo",
-            "numOfFormulationThree",
-            "numOfFormulationFour",
-            "numOfFormulationFive",
-            "numOfFormulationSix",
+            "numberOfCriticalRescueCases",
+            "numberOfDeaths",
+            "numberOfFollowUpsForCriticallyIllPatients",
         ];
 
         const lines = [
@@ -220,12 +178,9 @@ export default function TableFourMonthly() {
             ...rows.map((r) =>
                 [
                     r.month,
-                    r.numOfFormulationOne,
-                    r.numOfFormulationTwo,
-                    r.numOfFormulationThree,
-                    r.numOfFormulationFour,
-                    r.numOfFormulationFive,
-                    r.numOfFormulationSix,
+                    r.numberOfCriticalRescueCases,
+                    r.numberOfDeaths,
+                    r.numberOfFollowUpsForCriticallyIllPatients,
                 ]
                     .map((v) => `${v}`)
                     .join(",")
@@ -238,7 +193,7 @@ export default function TableFourMonthly() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `table-four-monthly-${year}.csv`;
+        a.download = `table-five-monthly-${year}.csv`;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -250,18 +205,15 @@ export default function TableFourMonthly() {
 
         const dataForSheet = rows.map((r) => ({
             Month: r.month,
-            FormulationOne: r.numOfFormulationOne,
-            FormulationTwo: r.numOfFormulationTwo,
-            FormulationThree: r.numOfFormulationThree,
-            FormulationFour: r.numOfFormulationFour,
-            FormulationFive: r.numOfFormulationFive,
-            FormulationSix: r.numOfFormulationSix,
+            RescueCases: r.numberOfCriticalRescueCases,
+            Deaths: r.numberOfDeaths,
+            FollowUps: r.numberOfFollowUpsForCriticallyIllPatients,
         }));
 
         const XLSX = await import("xlsx");
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.json_to_sheet(dataForSheet, { cellDates: false });
-        XLSX.utils.book_append_sheet(wb, ws, "TableFourMonthly");
+        XLSX.utils.book_append_sheet(wb, ws, "TableFiveMonthly");
 
         const wbout = XLSX.write(wb, { type: "array", bookType: "xlsx" });
         const blob = new Blob([wbout], {
@@ -271,7 +223,7 @@ export default function TableFourMonthly() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `table-four-monthly-${year}.xlsx`;
+        a.download = `table-five-monthly-${year}.xlsx`;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -349,26 +301,20 @@ export default function TableFourMonthly() {
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
                         <th className="py-2 px-3">{t("month")}</th>
-                        <th className="px-3">{t("formulationOne")}</th>
-                        <th className="px-3">{t("formulationTwo")}</th>
-                        <th className="px-3">{t("formulationThree")}</th>
-                        <th className="px-3">{t("formulationFour")}</th>
-                        <th className="px-3">{t("formulationFive")}</th>
-                        <th className="px-3">{t("formulationSix")}</th>
+                        <th className="px-3">{t("rescueCases")}</th>
+                        <th className="px-3">{t("deaths")}</th>
+                        <th className="px-3">{t("followUps")}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {rows.map((r) => (
                         <tr key={r.month} className="border-b hover:bg-gray-50">
                             <td className="py-2 px-3">{r.month}</td>
-                            <td className="px-3">{r.numOfFormulationOne}</td>
-                            <td className="px-3">{r.numOfFormulationTwo}</td>
+                            <td className="px-3">{r.numberOfCriticalRescueCases}</td>
+                            <td className="px-3">{r.numberOfDeaths}</td>
                             <td className="px-3">
-                                {r.numOfFormulationThree}
+                                {r.numberOfFollowUpsForCriticallyIllPatients}
                             </td>
-                            <td className="px-3">{r.numOfFormulationFour}</td>
-                            <td className="px-3">{r.numOfFormulationFive}</td>
-                            <td className="px-3">{r.numOfFormulationSix}</td>
                         </tr>
                     ))}
                     {rows.length === 0 && !loading && (
@@ -389,22 +335,13 @@ export default function TableFourMonthly() {
                                 {t("totals")} ({rows.length} {t("rows")})
                             </td>
                             <td className="px-3">
-                                {totals.numOfFormulationOne}
+                                {totals.numberOfCriticalRescueCases}
                             </td>
                             <td className="px-3">
-                                {totals.numOfFormulationTwo}
+                                {totals.numberOfDeaths}
                             </td>
                             <td className="px-3">
-                                {totals.numOfFormulationThree}
-                            </td>
-                            <td className="px-3">
-                                {totals.numOfFormulationFour}
-                            </td>
-                            <td className="px-3">
-                                {totals.numOfFormulationFive}
-                            </td>
-                            <td className="px-3">
-                                {totals.numOfFormulationSix}
+                                {totals.numberOfFollowUpsForCriticallyIllPatients}
                             </td>
                         </tr>
                         </tfoot>
@@ -433,49 +370,25 @@ export default function TableFourMonthly() {
 
                                 <Line
                                     type="monotone"
-                                    dataKey="numOfFormulationOne"
-                                    name={t("formulationOne")}
+                                    dataKey="numberOfCriticalRescueCases"
+                                    name={t("rescueCases")}
                                     stroke="#2563EB"
                                     dot={false}
                                     isAnimationActive={false}
                                 />
                                 <Line
                                     type="monotone"
-                                    dataKey="numOfFormulationTwo"
-                                    name={t("formulationTwo")}
+                                    dataKey="numberOfDeaths"
+                                    name={t("deaths")}
                                     stroke="#10B981"
                                     dot={false}
                                     isAnimationActive={false}
                                 />
                                 <Line
                                     type="monotone"
-                                    dataKey="numOfFormulationThree"
-                                    name={t("formulationThree")}
+                                    dataKey="numberOfFollowUpsForCriticallyIllPatients"
+                                    name={t("followUps")}
                                     stroke="#F59E0B"
-                                    dot={false}
-                                    isAnimationActive={false}
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="numOfFormulationFour"
-                                    name={t("formulationFour")}
-                                    stroke="#EF4444"
-                                    dot={false}
-                                    isAnimationActive={false}
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="numOfFormulationFive"
-                                    name={t("formulationFive")}
-                                    stroke="#8B5CF6"
-                                    dot={false}
-                                    isAnimationActive={false}
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="numOfFormulationSix"
-                                    name={t("formulationSix")}
-                                    stroke="#06B6D4"
                                     dot={false}
                                     isAnimationActive={false}
                                 />
@@ -505,39 +418,21 @@ export default function TableFourMonthly() {
                                 {/* No <Legend /> from Recharts */}
 
                                 <Bar
-                                    dataKey="numOfFormulationOne"
-                                    name={t("formulationOne")}
+                                    dataKey="numberOfCriticalRescueCases"
+                                    name={t("rescueCases")}
                                     fill="#2563EB"
                                     isAnimationActive={false}
                                 />
                                 <Bar
-                                    dataKey="numOfFormulationTwo"
-                                    name={t("formulationTwo")}
+                                    dataKey="numberOfDeaths"
+                                    name={t("deaths")}
                                     fill="#10B981"
                                     isAnimationActive={false}
                                 />
                                 <Bar
-                                    dataKey="numOfFormulationThree"
-                                    name={t("formulationThree")}
+                                    dataKey="numberOfFollowUpsForCriticallyIllPatients"
+                                    name={t("followUps")}
                                     fill="#F59E0B"
-                                    isAnimationActive={false}
-                                />
-                                <Bar
-                                    dataKey="numOfFormulationFour"
-                                    name={t("formulationFour")}
-                                    fill="#EF4444"
-                                    isAnimationActive={false}
-                                />
-                                <Bar
-                                    dataKey="numOfFormulationFive"
-                                    name={t("formulationFive")}
-                                    fill="#8B5CF6"
-                                    isAnimationActive={false}
-                                />
-                                <Bar
-                                    dataKey="numOfFormulationSix"
-                                    name={t("formulationSix")}
-                                    fill="#06B6D4"
                                     isAnimationActive={false}
                                 />
                             </BarChart>
