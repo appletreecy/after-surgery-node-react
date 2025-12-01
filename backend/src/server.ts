@@ -21,11 +21,25 @@ import {
     tableOneMonthlyTypeDefs,
     tableOneMonthlyResolvers,
 } from "./graphql/tableOneMonthly";
+import {
+    tableTwoMonthlyTypeDefs,
+    tableTwoMonthlyResolvers,
+} from "./graphql/tableTwoMonthly";
+import {
+    tableThreeMonthlyTypeDefs,
+    tableThreeMonthlyResolvers,
+} from "./graphql/tableThreeMonthly";
+import {
+    tableFourMonthlyTypeDefs,
+    tableFourMonthlyResolvers,
+} from "./graphql/tableFourMonthly";
+import {
+    tableFiveMonthlyTypeDefs,
+    tableFiveMonthlyResolvers,
+} from "./graphql/tableFiveMonthly";
 
-import {tableTwoMonthlyTypeDefs, tableTwoMonthlyResolvers} from "./graphql/tableTwoMonthly";
-import { tableThreeMonthlyTypeDefs, tableThreeMonthlyResolvers } from "./graphql/tableThreeMonthly";
-import {tableFourMonthlyTypeDefs, tableFourMonthlyResolvers} from "./graphql/tableFourMonthly";
-import { tableFiveMonthlyTypeDefs, tableFiveMonthlyResolvers } from "./graphql/tableFiveMonthly";
+// Quarterly pages
+import tableFiveQuarterlyRouter from "./routes/tableFiveQuarterly";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -48,6 +62,41 @@ if (NODE_ENV !== "production") {
     );
 }
 
+// 🔐 ---------------------------
+// Attach req.user for REST/RPC
+// 🔐 ---------------------------
+interface JwtPayload {
+    id: number;
+    email?: string;
+}
+
+app.use((req, _res, next) => {
+    const cookies = (req as any).cookies as
+        | Record<string, string>
+        | undefined;
+
+    const token = cookies?.access_token ?? cookies?.token;
+
+    if (token && process.env.JWT_SECRET) {
+        try {
+            const decoded = jwt.verify(
+                token,
+                process.env.JWT_SECRET
+            ) as JwtPayload;
+
+            // This is what tableFiveQuarterly expects
+            (req as any).user = { id: decoded.id };
+        } catch (err) {
+            console.warn("[REST] Invalid JWT", err);
+            (req as any).user = undefined;
+        }
+    } else {
+        (req as any).user = undefined;
+    }
+
+    next();
+});
+
 // -----------------------------
 // REST routes
 // -----------------------------
@@ -59,16 +108,13 @@ app.use("/table-four", tableFour);
 app.use("/table-five", tableFive);
 app.use("/table-joined", tableJoined);
 
+app.use("/rpc/tableFiveQuarterly", tableFiveQuarterlyRouter);
+
 // -----------------------------
 // GraphQL setup (/graphql)
 // -----------------------------
 
-// Small helper for decoding JWT from cookies for GraphQL
-interface JwtPayload {
-    id: number;
-    email?: string;
-}
-
+// (keep your existing GraphQL setup below as-is)
 async function startApollo() {
     const baseTypeDefs = /* GraphQL */ `
     type Query {
@@ -107,7 +153,6 @@ async function startApollo() {
 
     await server.start();
 
-    // Dedicated CORS for /graphql (must allow cookies)
     app.use(
         "/graphql",
         cors<cors.CorsRequest>({
@@ -120,8 +165,9 @@ async function startApollo() {
         express.json(),
         expressMiddleware(server, {
             context: async ({ req }) => {
-                // Read JWT from cookie
-                const cookies = (req as any).cookies as Record<string, string> | undefined;
+                const cookies = (req as any).cookies as
+                    | Record<string, string>
+                    | undefined;
                 const token = cookies?.access_token ?? cookies?.token;
 
                 let user: { id: number } | undefined;
@@ -138,7 +184,6 @@ async function startApollo() {
                     }
                 }
 
-                // This becomes ctx.user in your resolvers
                 return { user };
             },
         })
