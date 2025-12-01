@@ -30,6 +30,9 @@ import TableThreeMonthly from "@/pages/TableThreeMonthly";
 import TableFourMonthly from "@/pages/TableFourMonthly";
 import TableFiveMonthly from "@/pages/TableFiveMonthly";
 
+// Quarterly
+import TableFiveQuarterly from "@/pages/TableFiveQuarterly";
+
 // Apollo Client
 const httpLink = new HttpLink({
     uri: import.meta.env.DEV
@@ -57,6 +60,7 @@ const router = createBrowserRouter([
             { path: "table-three-monthly", element: <TableThreeMonthly /> },
             { path: "table-four-monthly", element: <TableFourMonthly /> },
             { path: "table-five-monthly", element: <TableFiveMonthly /> },
+            { path: "table-five-quarterly", element: <TableFiveQuarterly /> },
             { path: "table-two", element: <TableTwo /> },
             { path: "table-three", element: <TableThree /> },
             { path: "table-four", element: <TableFour /> },

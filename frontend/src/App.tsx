@@ -42,13 +42,26 @@ export default function App() {
         if (pathname.startsWith("/table-two-monthly")) return "Table - Table Two Monthly";
         if (pathname.startsWith("/table-three-monthly")) return "Table - Table Three Monthly";
         if (pathname.startsWith("/table-four-monthly")) return "Table - Table Four Monthly";
-        if (pathname.startsWith("/table-five")) return "Table - Table Five";
+        if (pathname.startsWith("/table-five-monthly")) return "Table - Table Five Monthly";
         return "Table Monthly - Tables";
     }
+
+    function currentTableLabelQuarterly(pathname: string) {
+        if (pathname.startsWith("/table-one-quarterly")) return "Table - Table One Quarterly";
+        if (pathname.startsWith("/table-two-quarterly")) return "Table - Table Two Quarterly";
+        if (pathname.startsWith("/table-three-quarterly")) return "Table - Table Three Quarterly";
+        if (pathname.startsWith("/table-four-quarterly")) return "Table - Table Four Quarterly";
+        if (pathname.startsWith("/table-five-quarterly")) return "Table - Table Five Quarterly";
+        return "Table Quarterly - Tables";
+    }
+
+
 
     const label = currentTableLabel(location.pathname);
 
     const labelMonthly = currentTableLabelMonthly(location.pathname);
+
+    const labelQuarterly = currentTableLabelQuarterly(location.pathname);
 
     return (
         <div className="min-h-screen w-full bg-[rgb(var(--background))] overflow-x-hidden">
@@ -67,6 +80,57 @@ export default function App() {
                             <Link to="/table-joined" className={isActive("/table-joined")}>
                                 Big Table
                             </Link>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="w-full sm:w-auto min-w-0 sm:min-w-[12rem] justify-between"
+                                    >
+                                        {labelQuarterly}
+                                        <svg
+                                            aria-hidden="true"
+                                            viewBox="0 0 20 20"
+                                            className="ml-2 h-4 w-4"
+                                        >
+                                            <path d="M5.25 7.5L10 12.25L14.75 7.5H5.25Z" />
+                                        </svg>
+                                    </Button>
+                                </DropdownMenuTrigger>
+
+                                {/* Solid dropdown background */}
+                                <DropdownMenuContent
+                                    align="start"
+                                    className="w-[75%] max-w-[12rem] bg-white shadow-lg border border-gray-200"
+                                >
+                                    <DropdownMenuLabel>MonthlyTables</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-one-monthly" className={isActive("/table-one-monthly")}>
+                                            Table One Monthly
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-two-monthly" className={isActive("/table-two-monthly")}>
+                                            Table Two Monthly
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-three-monthly" className={isActive("/table-three-monthly")}>
+                                            Table Three Monthly
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-four-monthly" className={isActive("/table-four-monthly")}>
+                                            Table Four Monthly
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link to="/table-five-quarterly" className={isActive("/table-five-quarterly")}>
+                                            Table Five Quarterly
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button
