@@ -105,8 +105,8 @@ export default function App() {
                                     <DropdownMenuLabel>MonthlyTables</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem asChild>
-                                        <Link to="/table-one-monthly" className={isActive("/table-one-monthly")}>
-                                            Table One Monthly
+                                        <Link to="/table-one-quarterly" className={isActive("/table-one-quarterly")}>
+                                            Table One Quarterly
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
