@@ -39,6 +39,7 @@ import {
 } from "./graphql/tableFiveMonthly";
 
 // Quarterly pages
+import tableOneQuarterly from "./routes/tableOneQuarterly";
 import tableFiveQuarterlyRouter from "./routes/tableFiveQuarterly";
 
 const app = express();
@@ -108,6 +109,8 @@ app.use("/table-four", tableFour);
 app.use("/table-five", tableFive);
 app.use("/table-joined", tableJoined);
 
+// Quarterly
+app.use("/rpc/tableOneQuarterly", tableOneQuarterly);
 app.use("/rpc/tableFiveQuarterly", tableFiveQuarterlyRouter);
 
 // -----------------------------

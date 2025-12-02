@@ -31,6 +31,7 @@ import TableFourMonthly from "@/pages/TableFourMonthly";
 import TableFiveMonthly from "@/pages/TableFiveMonthly";
 
 // Quarterly
+import TableOneQuarterly from "@/pages/TableOneQuarterly";
 import TableFiveQuarterly from "@/pages/TableFiveQuarterly";
 
 // Apollo Client
@@ -60,6 +61,7 @@ const router = createBrowserRouter([
             { path: "table-three-monthly", element: <TableThreeMonthly /> },
             { path: "table-four-monthly", element: <TableFourMonthly /> },
             { path: "table-five-monthly", element: <TableFiveMonthly /> },
+            {path: "table-one-quarterly", element: <TableOneQuarterly /> },
             { path: "table-five-quarterly", element: <TableFiveQuarterly /> },
             { path: "table-two", element: <TableTwo /> },
             { path: "table-three", element: <TableThree /> },
