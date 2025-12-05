@@ -40,6 +40,7 @@ import {
 
 // Quarterly pages
 import tableOneQuarterly from "./routes/tableOneQuarterly";
+import tableTwoQuarterly from "./routes/tableTwoQuarterly";
 import tableFiveQuarterlyRouter from "./routes/tableFiveQuarterly";
 
 const app = express();
@@ -111,6 +112,7 @@ app.use("/table-joined", tableJoined);
 
 // Quarterly
 app.use("/rpc/tableOneQuarterly", tableOneQuarterly);
+app.use("/rpc/tableTwoQuarterly", tableTwoQuarterly);
 app.use("/rpc/tableFiveQuarterly", tableFiveQuarterlyRouter);
 
 // -----------------------------

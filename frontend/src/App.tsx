@@ -102,7 +102,7 @@ export default function App() {
                                     align="start"
                                     className="w-[75%] max-w-[12rem] bg-white shadow-lg border border-gray-200"
                                 >
-                                    <DropdownMenuLabel>MonthlyTables</DropdownMenuLabel>
+                                    <DropdownMenuLabel>QuarterlyTables</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem asChild>
                                         <Link to="/table-one-quarterly" className={isActive("/table-one-quarterly")}>
@@ -110,8 +110,8 @@ export default function App() {
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
-                                        <Link to="/table-two-monthly" className={isActive("/table-two-monthly")}>
-                                            Table Two Monthly
+                                        <Link to="/table-two-quarterly" className={isActive("/table-two-quarterly")}>
+                                            Table Two Quarterly
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
