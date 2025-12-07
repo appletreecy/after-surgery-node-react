@@ -41,7 +41,9 @@ import {
 // Quarterly pages
 import tableOneQuarterly from "./routes/tableOneQuarterly";
 import tableTwoQuarterly from "./routes/tableTwoQuarterly";
+import tableFourQuarterly from "./routes/tableFourQuarterly";
 import tableFiveQuarterlyRouter from "./routes/tableFiveQuarterly";
+import router from "./routes/auth";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -113,6 +115,7 @@ app.use("/table-joined", tableJoined);
 // Quarterly
 app.use("/rpc/tableOneQuarterly", tableOneQuarterly);
 app.use("/rpc/tableTwoQuarterly", tableTwoQuarterly);
+app.use( "/rpc/tableFourQuarterly", tableFourQuarterly);
 app.use("/rpc/tableFiveQuarterly", tableFiveQuarterlyRouter);
 
 // -----------------------------
