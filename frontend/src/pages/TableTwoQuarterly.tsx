@@ -39,7 +39,7 @@ type Lang = "en" | "zh";
 
 const STRINGS: Record<Lang, Record<string, string>> = {
     en: {
-        title: "Table Five – Quarterly Summary",
+        title: "Table Two – Quarterly Summary",
         year: "Year",
         apply: "Apply",
         exportCsv: "Export CSV",
@@ -68,7 +68,7 @@ const STRINGS: Record<Lang, Record<string, string>> = {
         barChartTitle: "Quarterly Totals (Bar Chart)",
     },
     zh: {
-        title: "表五 – 季度汇总",
+        title: "表二 – 季度汇总",
         year: "年份",
         apply: "应用",
         exportCsv: "导出 CSV",
