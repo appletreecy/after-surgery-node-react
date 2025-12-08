@@ -33,6 +33,7 @@ import TableFiveMonthly from "@/pages/TableFiveMonthly";
 // Quarterly
 import TableOneQuarterly from "@/pages/TableOneQuarterly";
 import TableTwoQuarterly from "@/pages/TableTwoQuarterly";
+import TableThreeQuarterly from "@/pages/TableThreeQuarterly";
 import TableFourQuarterly from "@/pages/TableFourQuarterly";
 import TableFiveQuarterly from "@/pages/TableFiveQuarterly";
 
@@ -65,6 +66,7 @@ const router = createBrowserRouter([
             { path: "table-five-monthly", element: <TableFiveMonthly /> },
             {path: "table-one-quarterly", element: <TableOneQuarterly /> },
             { path: "table-two-quarterly", element: <TableTwoQuarterly /> },
+            { path: "table-three-quarterly", element: <TableThreeQuarterly /> },
             {path: "table-four-quarterly", element: <TableFourQuarterly /> },
             { path: "table-five-quarterly", element: <TableFiveQuarterly /> },
             { path: "table-two", element: <TableTwo /> },
