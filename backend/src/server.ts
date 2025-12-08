@@ -41,6 +41,7 @@ import {
 // Quarterly pages
 import tableOneQuarterly from "./routes/tableOneQuarterly";
 import tableTwoQuarterly from "./routes/tableTwoQuarterly";
+import tableThreeQuarterly from "./routes/tableThreeQuarterly";
 import tableFourQuarterly from "./routes/tableFourQuarterly";
 import tableFiveQuarterlyRouter from "./routes/tableFiveQuarterly";
 import router from "./routes/auth";
@@ -115,6 +116,7 @@ app.use("/table-joined", tableJoined);
 // Quarterly
 app.use("/rpc/tableOneQuarterly", tableOneQuarterly);
 app.use("/rpc/tableTwoQuarterly", tableTwoQuarterly);
+app.use("/rpc/tableThreeQuarterly", tableThreeQuarterly);
 app.use( "/rpc/tableFourQuarterly", tableFourQuarterly);
 app.use("/rpc/tableFiveQuarterly", tableFiveQuarterlyRouter);
 

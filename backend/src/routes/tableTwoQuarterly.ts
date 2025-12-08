@@ -110,7 +110,7 @@ router.post("/", async (req, res) => {
 
         return res.json(result);
     } catch (err) {
-        console.error("[tableOneQuarterly] error:", err);
+        console.error("[tableTwoQuarterly] error:", err);
         return res.status(500).json({ error: "Internal server error" });
     }
 });
