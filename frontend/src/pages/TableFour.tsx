@@ -560,8 +560,8 @@ export default function TableFour() {
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-                <table className="w-full text-sm">
+            <div className="bg-white rounded-xl shadow-sm border overflow-x-auto">
+                <table className="min-w-[640px] w-full text-sm">
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
                         <th
