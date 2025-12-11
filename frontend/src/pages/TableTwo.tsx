@@ -802,20 +802,20 @@ export default function TableTwo() {
                             <td className="py-2 px-3">
                                 {r.date ? new Date(r.date).toLocaleDateString() : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.numOfAbdominalDistension ?? "-"}</td>
-                            <td className="px-3">{r.numOfAllergicRash ?? "-"}</td>
-                            <td className="px-3">{r.numOfChestDiscomfort ?? "-"}</td>
-                            <td className="px-3">{r.numOfDelirium ?? "-"}</td>
-                            <td className="px-3">{r.numOfDizziness ?? "-"}</td>
-                            <td className="px-3">{r.numOfEndotrachealIntubationDiscomfort ?? "-"}</td>
-                            <td className="px-3">{r.numOfEpigastricPain ?? "-"}</td>
-                            <td className="px-3">{r.numOfItching ?? "-"}</td>
-                            <td className="px-3">{r.numOfNauseaAndVomiting ?? "-"}</td>
-                            <td className="px-3">{r.numOfNauseaAndVomitingAndDizziness ?? "-"}</td>
-                            <td className="px-3">{r.numOfOther ?? "-"}</td>
-                            <td className="px-3">{r.numOfProlongedAnestheticRecovery ?? "-"}</td>
-                            <td className="px-3">{r.numOfPunctureSiteAbnormality ?? "-"}</td>
-                            <td className="px-3">{r.numOfTourniquetReaction ?? "-"}</td>
+                            <td className="px-3">{r.numOfAbdominalDistension ?? "0"}</td>
+                            <td className="px-3">{r.numOfAllergicRash ?? "0"}</td>
+                            <td className="px-3">{r.numOfChestDiscomfort ?? "0"}</td>
+                            <td className="px-3">{r.numOfDelirium ?? "0"}</td>
+                            <td className="px-3">{r.numOfDizziness ?? "0"}</td>
+                            <td className="px-3">{r.numOfEndotrachealIntubationDiscomfort ?? "0"}</td>
+                            <td className="px-3">{r.numOfEpigastricPain ?? "0"}</td>
+                            <td className="px-3">{r.numOfItching ?? "0"}</td>
+                            <td className="px-3">{r.numOfNauseaAndVomiting ?? "0"}</td>
+                            <td className="px-3">{r.numOfNauseaAndVomitingAndDizziness ?? "0"}</td>
+                            <td className="px-3">{r.numOfOther ?? "0"}</td>
+                            <td className="px-3">{r.numOfProlongedAnestheticRecovery ?? "0"}</td>
+                            <td className="px-3">{r.numOfPunctureSiteAbnormality ?? "0"}</td>
+                            <td className="px-3">{r.numOfTourniquetReaction ?? "0"}</td>
                             <td className="px-3">{r.otherComments ?? "-"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">

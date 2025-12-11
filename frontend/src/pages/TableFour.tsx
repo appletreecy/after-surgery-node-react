@@ -589,12 +589,12 @@ export default function TableFour() {
                                     ? new Date(r.date).toLocaleDateString()
                                     : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.numOfFormulationOne ?? "-"}</td>
-                            <td className="px-3">{r.numOfFormulationTwo ?? "-"}</td>
-                            <td className="px-3">{r.numOfFormulationThree ?? "-"}</td>
-                            <td className="px-3">{r.numOfFormulationFour ?? "-"}</td>
-                            <td className="px-3">{r.numOfFormulationFive ?? "-"}</td>
-                            <td className="px-3">{r.numOfFormulationSix ?? "-"}</td>
+                            <td className="px-3">{r.numOfFormulationOne ?? "0"}</td>
+                            <td className="px-3">{r.numOfFormulationTwo ?? "0"}</td>
+                            <td className="px-3">{r.numOfFormulationThree ?? "0"}</td>
+                            <td className="px-3">{r.numOfFormulationFour ?? "0"}</td>
+                            <td className="px-3">{r.numOfFormulationFive ?? "0"}</td>
+                            <td className="px-3">{r.numOfFormulationSix ?? "0"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}
