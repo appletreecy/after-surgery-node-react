@@ -1506,7 +1506,7 @@ export default function TableTwo() {
                     </DialogHeader>
 
                     {/* Scrollable form area */}
-                    <div className="mt-2 space-y-2 overflow-y-auto max-h-[70vh] pr-1">
+                    <div className="mt-2 space-y-2 overflow-y-auto max-h-[70vh] pr-1 overflow-x-hidden w-full min-w-0">
                         <Input
                             type="date"
                             value={form.date}
