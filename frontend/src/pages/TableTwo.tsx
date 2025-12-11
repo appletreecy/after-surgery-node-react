@@ -1498,14 +1498,15 @@ export default function TableTwo() {
                     </div>
                 </div>
             </div>
-
             {/* Create dialog */}
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="bg-white/100 backdrop-blur-none">
+                <DialogContent className="bg-white/100 backdrop-blur-none max-h-[90vh] flex flex-col">
                     <DialogHeader>
                         <DialogTitle>{t("addRecord")}</DialogTitle>
                     </DialogHeader>
-                    <div className="space-y-2">
+
+                    {/* Scrollable form area */}
+                    <div className="mt-2 space-y-2 overflow-y-auto max-h-[70vh] pr-1">
                         <Input
                             type="date"
                             value={form.date}
