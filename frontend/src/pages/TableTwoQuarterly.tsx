@@ -500,8 +500,8 @@ export default function TableTwoQuarterly() {
             )}
 
             {/* Quarterly table */}
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-                <table className="w-full text-sm">
+            <div className="bg-white rounded-xl shadow-sm border overflow-x-auto">
+                <table className="min-w-[640px] w-full text-sm">
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
                         <th className="py-2 px-3">{t("quarter")}</th>
