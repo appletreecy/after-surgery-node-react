@@ -514,10 +514,10 @@ export default function TableOne() {
                                     ? new Date(r.date).toLocaleDateString()
                                     : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.numOfAdverseReactionCases ?? "-"}</td>
-                            <td className="px-3">{r.numOfInadequateAnalgesia ?? "-"}</td>
-                            <td className="px-3">{r.numOfPostoperativeAnalgesiaCases ?? "-"} </td>
-                            <td className="px-3">{r.numOfPostoperativeVisits ?? "-"}</td>
+                            <td className="px-3">{r.numOfAdverseReactionCases ?? "0"}</td>
+                            <td className="px-3">{r.numOfInadequateAnalgesia ?? "0"}</td>
+                            <td className="px-3">{r.numOfPostoperativeAnalgesiaCases ?? "0"} </td>
+                            <td className="px-3">{r.numOfPostoperativeVisits ?? "0"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}

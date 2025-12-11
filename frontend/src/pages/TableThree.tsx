@@ -681,16 +681,16 @@ export default function TableThree() {
                                     ? new Date(r.date).toLocaleDateString()
                                     : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.numOfJointComplicationCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfMotorDysfunctionCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfTraumaComplicationCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfAnkleComplicationCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfPediatricAdverseEventCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfSpinalComplicationCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfHandSurgeryComplicationCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfObstetricAdverseEventCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfGynecologicalAdverseEventCount ?? "-"}</td>
-                            <td className="px-3">{r.numOfSurgicalTreatmentCount ?? "-"}</td>
+                            <td className="px-3">{r.numOfJointComplicationCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfMotorDysfunctionCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfTraumaComplicationCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfAnkleComplicationCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfPediatricAdverseEventCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfSpinalComplicationCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfHandSurgeryComplicationCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfObstetricAdverseEventCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfGynecologicalAdverseEventCount ?? "0"}</td>
+                            <td className="px-3">{r.numOfSurgicalTreatmentCount ?? "0"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}

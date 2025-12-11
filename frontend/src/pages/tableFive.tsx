@@ -523,9 +523,9 @@ export default function TableFive() {
                             </td>
                             <td className="px-3">{r.criticalPatientsName ?? "-"}</td>
                             <td className="px-3">{r.visitFindingsForCriticalPatient ?? "-"}</td>
-                            <td className="px-3">{r.numberOfCriticalRescueCases ?? "-"}</td>
-                            <td className="px-3">{r.numberOfDeaths ?? "-"}</td>
-                            <td className="px-3">{r.numberOfFollowUpsForCriticallyIllPatients ?? "-"}</td>
+                            <td className="px-3">{r.numberOfCriticalRescueCases ?? "0"}</td>
+                            <td className="px-3">{r.numberOfDeaths ?? "0"}</td>
+                            <td className="px-3">{r.numberOfFollowUpsForCriticallyIllPatients ?? "0"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}

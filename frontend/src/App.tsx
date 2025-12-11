@@ -31,6 +31,7 @@ export default function App() {
     // ✅ Label generator (with "Table - " prefix)
     function currentTableLabel(pathname: string) {
         if (pathname.startsWith("/table-one")) return "Table - Table One";
+        if (pathname.startsWith("/table-two")) return "Table - Table Two";
         if (pathname.startsWith("/table-three")) return "Table - Table Three";
         if (pathname.startsWith("/table-four")) return "Table - Table Four";
         if (pathname.startsWith("/table-five")) return "Table - Table Five";
