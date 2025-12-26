@@ -572,12 +572,12 @@ export default function TableFour() {
                         >
                             {t("date")} {dateSort === "asc" ? "▲" : "▼"}
                         </th>
-                        <th className="px-3">{t("formulationOne")}</th>
-                        <th className="px-3">{t("formulationTwo")}</th>
-                        <th className="px-3">{t("formulationThree")}</th>
-                        <th className="px-3">{t("formulationFour")}</th>
-                        <th className="px-3">{t("formulationFive")}</th>
-                        <th className="px-3">{t("formulationSix")}</th>
+                        <th className="px-3 text-center">{t("formulationOne")}</th>
+                        <th className="px-3 text-center">{t("formulationTwo")}</th>
+                        <th className="px-3 text-center">{t("formulationThree")}</th>
+                        <th className="px-3 text-center">{t("formulationFour")}</th>
+                        <th className="px-3 text-center">{t("formulationFive")}</th>
+                        <th className="px-3 text-center">{t("formulationSix")}</th>
                         <th className="px-3 w-32"></th>
                     </tr>
                     </thead>
@@ -589,12 +589,12 @@ export default function TableFour() {
                                     ? new Date(r.date).toLocaleDateString()
                                     : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.numOfFormulationOne ?? "0"}</td>
-                            <td className="px-3">{r.numOfFormulationTwo ?? "0"}</td>
-                            <td className="px-3">{r.numOfFormulationThree ?? "0"}</td>
-                            <td className="px-3">{r.numOfFormulationFour ?? "0"}</td>
-                            <td className="px-3">{r.numOfFormulationFive ?? "0"}</td>
-                            <td className="px-3">{r.numOfFormulationSix ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationOne ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationTwo ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationThree ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationFour ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationFive ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationSix ?? "0"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}

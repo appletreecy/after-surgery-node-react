@@ -660,16 +660,16 @@ export default function TableThree() {
                         >
                             {t("date")} {dateSort === "asc" ? "▲" : "▼"}
                         </th>
-                        <th className="px-3">{t("joint")}</th>
-                        <th className="px-3">{t("motor")}</th>
-                        <th className="px-3">{t("trauma")}</th>
-                        <th className="px-3">{t("ankle")}</th>
-                        <th className="px-3">{t("pediatric")}</th>
-                        <th className="px-3">{t("spinal")}</th>
-                        <th className="px-3">{t("hand")}</th>
-                        <th className="px-3">{t("obstetric")}</th>
-                        <th className="px-3">{t("gyn")}</th>
-                        <th className="px-3">{t("surgical")}</th>
+                        <th className="px-3 text-center">{t("joint")}</th>
+                        <th className="px-3 text-center">{t("motor")}</th>
+                        <th className="px-3 text-center">{t("trauma")}</th>
+                        <th className="px-3 text-center">{t("ankle")}</th>
+                        <th className="px-3 text-center">{t("pediatric")}</th>
+                        <th className="px-3 text-center">{t("spinal")}</th>
+                        <th className="px-3 text-center">{t("hand")}</th>
+                        <th className="px-3 text-center">{t("obstetric")}</th>
+                        <th className="px-3 text-center">{t("gyn")}</th>
+                        <th className="px-3 text-center">{t("surgical")}</th>
                         <th className="px-3 w-32"></th>
                     </tr>
                     </thead>
@@ -681,16 +681,16 @@ export default function TableThree() {
                                     ? new Date(r.date).toLocaleDateString()
                                     : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.numOfJointComplicationCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfMotorDysfunctionCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfTraumaComplicationCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfAnkleComplicationCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfPediatricAdverseEventCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfSpinalComplicationCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfHandSurgeryComplicationCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfObstetricAdverseEventCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfGynecologicalAdverseEventCount ?? "0"}</td>
-                            <td className="px-3">{r.numOfSurgicalTreatmentCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfJointComplicationCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfMotorDysfunctionCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfTraumaComplicationCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfAnkleComplicationCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfPediatricAdverseEventCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfSpinalComplicationCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfHandSurgeryComplicationCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfObstetricAdverseEventCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfGynecologicalAdverseEventCount ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfSurgicalTreatmentCount ?? "0"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}
