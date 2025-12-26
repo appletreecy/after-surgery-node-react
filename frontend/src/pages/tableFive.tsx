@@ -507,11 +507,11 @@ export default function TableFive() {
                         >
                             {t("date")} {dateSort === "asc" ? "▲" : "▼"}
                         </th>
-                        <th className="px-3">{t("criticalName")}</th>
-                        <th className="px-3">{t("findings")}</th>
-                        <th className="px-3">{t("rescueCases")}</th>
-                        <th className="px-3">{t("deaths")}</th>
-                        <th className="px-3">{t("followUps")}</th>
+                        <th className="px-3 text-center">{t("criticalName")}</th>
+                        <th className="px-3 text-center">{t("findings")}</th>
+                        <th className="px-3 text-center">{t("rescueCases")}</th>
+                        <th className="px-3 text-center">{t("deaths")}</th>
+                        <th className="px-3 text-center">{t("followUps")}</th>
                         <th className="px-3 w-32"></th>
                     </tr>
                     </thead>
@@ -521,11 +521,11 @@ export default function TableFive() {
                             <td className="py-2 px-3">
                                 {r.date ? new Date(r.date).toLocaleDateString() : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.criticalPatientsName ?? "-"}</td>
-                            <td className="px-3">{r.visitFindingsForCriticalPatient ?? "-"}</td>
-                            <td className="px-3">{r.numberOfCriticalRescueCases ?? "0"}</td>
-                            <td className="px-3">{r.numberOfDeaths ?? "0"}</td>
-                            <td className="px-3">{r.numberOfFollowUpsForCriticallyIllPatients ?? "0"}</td>
+                            <td className="px-3 text-center">{r.criticalPatientsName ?? "-"}</td>
+                            <td className="px-3 text-center">{r.visitFindingsForCriticalPatient ?? "-"}</td>
+                            <td className="px-3 text-center">{r.numberOfCriticalRescueCases ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numberOfDeaths ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numberOfFollowUpsForCriticallyIllPatients ?? "0"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}

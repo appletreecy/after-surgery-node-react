@@ -499,10 +499,10 @@ export default function TableOne() {
                         >
                             {t("date")} {dateSort === "asc" ? "▲" : "▼"}
                         </th>
-                        <th className="px-3">{t("adverse")}</th>
-                        <th className="px-3">{t("inadequate")}</th>
-                        <th className="px-3">{t("postopAnalgesia")}</th>
-                        <th className="px-3">{t("visits")}</th>
+                        <th className="px-3 text-center">{t("adverse")}</th>
+                        <th className="px-3 text-center">{t("inadequate")}</th>
+                        <th className="px-3 text-center">{t("postopAnalgesia")}</th>
+                        <th className="px-3 text-center">{t("visits")}</th>
                         <th className="px-3 w-32"></th>
                     </tr>
                     </thead>
@@ -514,10 +514,10 @@ export default function TableOne() {
                                     ? new Date(r.date).toLocaleDateString()
                                     : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.numOfAdverseReactionCases ?? "0"}</td>
-                            <td className="px-3">{r.numOfInadequateAnalgesia ?? "0"}</td>
-                            <td className="px-3">{r.numOfPostoperativeAnalgesiaCases ?? "0"} </td>
-                            <td className="px-3">{r.numOfPostoperativeVisits ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfAdverseReactionCases ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfInadequateAnalgesia ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfPostoperativeAnalgesiaCases ?? "0"} </td>
+                            <td className="px-3 text-center">{r.numOfPostoperativeVisits ?? "0"}</td>
                             <td className="px-3">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}

@@ -778,21 +778,21 @@ export default function TableTwo() {
                         >
                             {t("date")} {dateSort === "asc" ? "▲" : "▼"}
                         </th>
-                        <th className="px-3">{t("abdominalDistension")}</th>
-                        <th className="px-3">{t("allergicRash")}</th>
-                        <th className="px-3">{t("chestDiscomfort")}</th>
-                        <th className="px-3">{t("delirium")}</th>
-                        <th className="px-3">{t("dizziness")}</th>
-                        <th className="px-3">{t("endotrachealIntubationDiscomfort")}</th>
-                        <th className="px-3">{t("epigastricPain")}</th>
-                        <th className="px-3">{t("itching")}</th>
-                        <th className="px-3">{t("nauseaAndVomiting")}</th>
-                        <th className="px-3">{t("nauseaAndVomitingAndDizziness")}</th>
-                        <th className="px-3">{t("other")}</th>
-                        <th className="px-3">{t("prolongedAnestheticRecovery")}</th>
-                        <th className="px-3">{t("punctureSiteAbnormality")}</th>
-                        <th className="px-3">{t("tourniquetReaction")}</th>
-                        <th className="px-3">{t("otherComments")}</th>
+                        <th className="px-3 text-center">{t("abdominalDistension")}</th>
+                        <th className="px-3 text-center">{t("allergicRash")}</th>
+                        <th className="px-3 text-center">{t("chestDiscomfort")}</th>
+                        <th className="px-3 text-center">{t("delirium")}</th>
+                        <th className="px-3 text-center">{t("dizziness")}</th>
+                        <th className="px-3 text-center">{t("endotrachealIntubationDiscomfort")}</th>
+                        <th className="px-3 text-center">{t("epigastricPain")}</th>
+                        <th className="px-3 text-center">{t("itching")}</th>
+                        <th className="px-3 text-center">{t("nauseaAndVomiting")}</th>
+                        <th className="px-3 text-center">{t("nauseaAndVomitingAndDizziness")}</th>
+                        <th className="px-3 text-center">{t("other")}</th>
+                        <th className="px-3 text-center">{t("prolongedAnestheticRecovery")}</th>
+                        <th className="px-3 text-center">{t("punctureSiteAbnormality")}</th>
+                        <th className="px-3 text-center">{t("tourniquetReaction")}</th>
+                        <th className="px-3 text-center">{t("otherComments")}</th>
                         <th className="px-3 w-32"></th>
                     </tr>
                     </thead>
@@ -802,22 +802,22 @@ export default function TableTwo() {
                             <td className="py-2 px-3">
                                 {r.date ? new Date(r.date).toLocaleDateString() : new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td className="px-3">{r.numOfAbdominalDistension ?? "0"}</td>
-                            <td className="px-3">{r.numOfAllergicRash ?? "0"}</td>
-                            <td className="px-3">{r.numOfChestDiscomfort ?? "0"}</td>
-                            <td className="px-3">{r.numOfDelirium ?? "0"}</td>
-                            <td className="px-3">{r.numOfDizziness ?? "0"}</td>
-                            <td className="px-3">{r.numOfEndotrachealIntubationDiscomfort ?? "0"}</td>
-                            <td className="px-3">{r.numOfEpigastricPain ?? "0"}</td>
-                            <td className="px-3">{r.numOfItching ?? "0"}</td>
-                            <td className="px-3">{r.numOfNauseaAndVomiting ?? "0"}</td>
-                            <td className="px-3">{r.numOfNauseaAndVomitingAndDizziness ?? "0"}</td>
-                            <td className="px-3">{r.numOfOther ?? "0"}</td>
-                            <td className="px-3">{r.numOfProlongedAnestheticRecovery ?? "0"}</td>
-                            <td className="px-3">{r.numOfPunctureSiteAbnormality ?? "0"}</td>
-                            <td className="px-3">{r.numOfTourniquetReaction ?? "0"}</td>
-                            <td className="px-3">{r.otherComments ?? "-"}</td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">{r.numOfAbdominalDistension ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfAllergicRash ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfChestDiscomfort ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfDelirium ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfDizziness ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfEndotrachealIntubationDiscomfort ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfEpigastricPain ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfItching ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfNauseaAndVomiting ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfNauseaAndVomitingAndDizziness ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfOther ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfProlongedAnestheticRecovery ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfPunctureSiteAbnormality ?? "0"}</td>
+                            <td className="px-3 text-center">{r.numOfTourniquetReaction ?? "0"}</td>
+                            <td className="px-3 text-center">{r.otherComments ?? "-"}</td>
+                            <td className="px-3 ">
                                 <Button onClick={() => remove(r.id)} className="bg-red-600 hover:bg-red-700 text-white">
                                     {t("delete")}
                                 </Button>
