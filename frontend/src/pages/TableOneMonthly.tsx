@@ -336,6 +336,75 @@ export default function TableOneMonthly() {
                 </table>
             </div>
 
+            {/* Monthly table */}
+            <div className="bg-white rounded-xl shadow-sm border overflow-x-auto">
+                <table className="min-w-[640px] w-full text-sm">
+                    <thead>
+                    <tr className="text-left border-b bg-gray-50">
+                        <th className="py-2 px-3">{t("month")}</th>
+                        <th className="px-3 text-center">{t("adverse")}</th>
+                        <th className="px-3 text-center">{t("inadequate")}</th>
+                        <th className="px-3 text-center">{t("postopAnalgesia")}</th>
+                        <th className="px-3 text-center">{t("visits")}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {rows.map((r) => (
+                        <tr key={r.month} className="border-b hover:bg-gray-50">
+                            <td className="py-2 px-3">{r.month}</td>
+                            <td className="px-3 text-center">
+                                {r.numOfAdverseReactionCases}
+                            </td>
+                            <td className="px-3 text-center">
+                                {r.numOfInadequateAnalgesia}
+                            </td>
+                            <td className="px-3 text-center">
+                                {r.numOfPostoperativeAnalgesiaCases}
+                            </td>
+                            <td className="px-3 text-center">
+                                {r.numOfPostoperativeVisits}
+                            </td>
+                        </tr>
+                    ))}
+
+                    {rows.length === 0 && !loading && (
+                        <tr>
+                            <td
+                                colSpan={5}
+                                className="py-10 text-center text-gray-500"
+                            >
+                                {t("noEntries")}
+                            </td>
+                        </tr>
+                    )}
+                    </tbody>
+
+                    {rows.length > 0 && (
+                        <tfoot>
+                        <tr className="border-t bg-gray-50 font-semibold">
+                            <td className="py-2 px-3">
+                                {t("totals")} ({rows.length} {t("rows")})
+                            </td>
+                            <td className="px-3 text-center">
+                                {totals.numOfAdverseReactionCases}
+                            </td>
+                            <td className="px-3 text-center">
+                                {totals.numOfInadequateAnalgesia}
+                            </td>
+                            <td className="px-3 text-center">
+                                {totals.numOfPostoperativeAnalgesiaCases}
+                            </td>
+                            <td className="px-3 text-center">
+                                {totals.numOfPostoperativeVisits}
+                            </td>
+                        </tr>
+                        </tfoot>
+                    )}
+                </table>
+            </div>
+
+
             {/* Line Chart (under table) */}
             {rows.length > 0 && (
                 <div className="bg-white rounded-xl shadow-sm border p-4">
