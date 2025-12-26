@@ -349,26 +349,26 @@ export default function TableFourMonthly() {
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
                         <th className="py-2 px-3">{t("month")}</th>
-                        <th className="px-3">{t("formulationOne")}</th>
-                        <th className="px-3">{t("formulationTwo")}</th>
-                        <th className="px-3">{t("formulationThree")}</th>
-                        <th className="px-3">{t("formulationFour")}</th>
-                        <th className="px-3">{t("formulationFive")}</th>
-                        <th className="px-3">{t("formulationSix")}</th>
+                        <th className="px-3 text-center">{t("formulationOne")}</th>
+                        <th className="px-3 text-center">{t("formulationTwo")}</th>
+                        <th className="px-3 text-center">{t("formulationThree")}</th>
+                        <th className="px-3 text-center">{t("formulationFour")}</th>
+                        <th className="px-3 text-center">{t("formulationFive")}</th>
+                        <th className="px-3 text-center">{t("formulationSix")}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {rows.map((r) => (
                         <tr key={r.month} className="border-b hover:bg-gray-50">
                             <td className="py-2 px-3">{r.month}</td>
-                            <td className="px-3">{r.numOfFormulationOne}</td>
-                            <td className="px-3">{r.numOfFormulationTwo}</td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">{r.numOfFormulationOne}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationTwo}</td>
+                            <td className="px-3 text-center">
                                 {r.numOfFormulationThree}
                             </td>
-                            <td className="px-3">{r.numOfFormulationFour}</td>
-                            <td className="px-3">{r.numOfFormulationFive}</td>
-                            <td className="px-3">{r.numOfFormulationSix}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationFour}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationFive}</td>
+                            <td className="px-3 text-center">{r.numOfFormulationSix}</td>
                         </tr>
                     ))}
                     {rows.length === 0 && !loading && (
@@ -388,22 +388,22 @@ export default function TableFourMonthly() {
                             <td className="py-2 px-3">
                                 {t("totals")} ({rows.length} {t("rows")})
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfFormulationOne}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfFormulationTwo}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfFormulationThree}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfFormulationFour}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfFormulationFive}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfFormulationSix}
                             </td>
                         </tr>

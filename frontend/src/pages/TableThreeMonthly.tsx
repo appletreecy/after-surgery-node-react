@@ -337,34 +337,34 @@ export default function TableThreeMonthly() {
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
                         <th className="py-2 px-3">{t("month")}</th>
-                        <th className="px-3">{t("joint")}</th>
-                        <th className="px-3">{t("motor")}</th>
-                        <th className="px-3">{t("trauma")}</th>
-                        <th className="px-3">{t("ankle")}</th>
-                        <th className="px-3">{t("pediatric")}</th>
-                        <th className="px-3">{t("spinal")}</th>
-                        <th className="px-3">{t("hand")}</th>
-                        <th className="px-3">{t("obstetric")}</th>
-                        <th className="px-3">{t("gyn")}</th>
-                        <th className="px-3">{t("surgical")}</th>
+                        <th className="px-3 text-center">{t("joint")}</th>
+                        <th className="px-3 text-center">{t("motor")}</th>
+                        <th className="px-3 text-center">{t("trauma")}</th>
+                        <th className="px-3 text-center">{t("ankle")}</th>
+                        <th className="px-3 text-center">{t("pediatric")}</th>
+                        <th className="px-3 text-center">{t("spinal")}</th>
+                        <th className="px-3 text-center">{t("hand")}</th>
+                        <th className="px-3 text-center">{t("obstetric")}</th>
+                        <th className="px-3 text-center">{t("gyn")}</th>
+                        <th className="px-3 text-center">{t("surgical")}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {rows.map((r) => (
                         <tr key={r.month} className="border-b hover:bg-gray-50">
                             <td className="py-2 px-3">{r.month}</td>
-                            <td className="px-3">{r.numOfJointComplicationCount}</td>
-                            <td className="px-3">{r.numOfMotorDysfunctionCount}</td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">{r.numOfJointComplicationCount}</td>
+                            <td className="px-3 text-center">{r.numOfMotorDysfunctionCount}</td>
+                            <td className="px-3 text-center">
                                 {r.numOfTraumaComplicationCount}
                             </td>
-                            <td className="px-3">{r.numOfAnkleComplicationCount}</td>
-                            <td className="px-3">{r.numOfPediatricAdverseEventCount}</td>
-                            <td className="px-3">{r.numOfSpinalComplicationCount}</td>
-                            <td className="px-3">{r.numOfHandSurgeryComplicationCount}</td>
-                            <td className="px-3">{r.numOfObstetricAdverseEventCount}</td>
-                            <td className="px-3">{r.numOfGynecologicalAdverseEventCount}</td>
-                            <td className="px-3">{r.numOfSurgicalTreatmentCount}</td>
+                            <td className="px-3 text-center">{r.numOfAnkleComplicationCount}</td>
+                            <td className="px-3 text-center">{r.numOfPediatricAdverseEventCount}</td>
+                            <td className="px-3 text-center">{r.numOfSpinalComplicationCount}</td>
+                            <td className="px-3 text-center">{r.numOfHandSurgeryComplicationCount}</td>
+                            <td className="px-3 text-center">{r.numOfObstetricAdverseEventCount}</td>
+                            <td className="px-3 text-center">{r.numOfGynecologicalAdverseEventCount}</td>
+                            <td className="px-3 text-center">{r.numOfSurgicalTreatmentCount}</td>
                         </tr>
                     ))}
                     {rows.length === 0 && !loading && (
@@ -384,34 +384,34 @@ export default function TableThreeMonthly() {
                             <td className="py-2 px-3">
                                 {t("totals")} ({rows.length} {t("rows")})
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfJointComplicationCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfMotorDysfunctionCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfTraumaComplicationCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfAnkleComplicationCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfPediatricAdverseEventCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfSpinalComplicationCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfHandSurgeryComplicationCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfObstetricAdverseEventCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfGynecologicalAdverseEventCount}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfSurgicalTreatmentCount}
                             </td>
                         </tr>

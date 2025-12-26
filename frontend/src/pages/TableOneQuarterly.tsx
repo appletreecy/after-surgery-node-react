@@ -335,20 +335,20 @@ export default function TableOneQuarterly() {
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
                         <th className="py-2 px-3">{t("quarter")}</th>
-                        <th className="px-3">{t("adverse")}</th>
-                        <th className="px-3">{t("inadequate")}</th>
-                        <th className="px-3">{t("postopAnalgesia")}</th>
-                        <th className="px-3">{t("visits")}</th>
+                        <th className="px-3 text-center">{t("adverse")}</th>
+                        <th className="px-3 text-center">{t("inadequate")}</th>
+                        <th className="px-3 text-center">{t("postopAnalgesia")}</th>
+                        <th className="px-3 text-center">{t("visits")}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {rows.map((r) => (
                         <tr key={r.quarter} className="border-b hover:bg-gray-50">
                             <td className="py-2 px-3">{`${year} ${r.quarter}`}</td>
-                            <td className="px-3">{r.numOfAdverseReactionCases}</td>
-                            <td className="px-3">{r.numOfInadequateAnalgesia}</td>
-                            <td className="px-3">{r.numOfPostoperativeAnalgesiaCases}</td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">{r.numOfAdverseReactionCases}</td>
+                            <td className="px-3 text-center">{r.numOfInadequateAnalgesia}</td>
+                            <td className="px-3 text-center">{r.numOfPostoperativeAnalgesiaCases}</td>
+                            <td className="px-3 text-center">
                                 {r.numOfPostoperativeVisits}
                             </td>
                         </tr>
@@ -367,12 +367,12 @@ export default function TableOneQuarterly() {
                             <td className="py-2 px-3">
                                 {t("totals")} ({rows.length} {t("rows")})
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfAdverseReactionCases}
                             </td>
-                            <td className="px-3">{totals.numOfInadequateAnalgesia}</td>
-                            <td className="px-3">{totals.numOfPostoperativeAnalgesiaCases}</td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">{totals.numOfInadequateAnalgesia}</td>
+                            <td className="px-3 text-center">{totals.numOfPostoperativeAnalgesiaCases}</td>
+                            <td className="px-3 text-center">
                                 {totals.numOfPostoperativeVisits}
                             </td>
                         </tr>

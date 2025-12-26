@@ -373,42 +373,42 @@ export default function TableTwoMonthly() {
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
                         <th className="py-2 px-3">{t("month")}</th>
-                        <th className="px-3">{t("abdominalDistension")}</th>
-                        <th className="px-3">{t("allergicRash")}</th>
-                        <th className="px-3">{t("chestDiscomfort")}</th>
-                        <th className="px-3">{t("delirium")}</th>
-                        <th className="px-3">{t("dizziness")}</th>
-                        <th className="px-3">{t("endotrachealIntubationDiscomfort")}</th>
-                        <th className="px-3">{t("epigastricPain")}</th>
-                        <th className="px-3">{t("itching")}</th>
-                        <th className="px-3">{t("nauseaAndVomiting")}</th>
-                        <th className="px-3">{t("nauseaAndVomitingAndDizziness")}</th>
-                        <th className="px-3">{t("other")}</th>
-                        <th className="px-3">{t("prolongedAnestheticRecovery")}</th>
-                        <th className="px-3">{t("punctureSiteAbnormality")}</th>
-                        <th className="px-3">{t("tourniquetReaction")}</th>
+                        <th className="px-3 text-center">{t("abdominalDistension")}</th>
+                        <th className="px-3 text-center">{t("allergicRash")}</th>
+                        <th className="px-3 text-center">{t("chestDiscomfort")}</th>
+                        <th className="px-3 text-center">{t("delirium")}</th>
+                        <th className="px-3 text-center">{t("dizziness")}</th>
+                        <th className="px-3 text-center">{t("endotrachealIntubationDiscomfort")}</th>
+                        <th className="px-3 text-center">{t("epigastricPain")}</th>
+                        <th className="px-3 text-center">{t("itching")}</th>
+                        <th className="px-3 text-center">{t("nauseaAndVomiting")}</th>
+                        <th className="px-3 text-center">{t("nauseaAndVomitingAndDizziness")}</th>
+                        <th className="px-3 text-center">{t("other")}</th>
+                        <th className="px-3 text-center">{t("prolongedAnestheticRecovery")}</th>
+                        <th className="px-3 text-center">{t("punctureSiteAbnormality")}</th>
+                        <th className="px-3 text-center">{t("tourniquetReaction")}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {rows.map((r) => (
                         <tr key={r.month} className="border-b hover:bg-gray-50">
                             <td className="py-2 px-3">{r.month}</td>
-                            <td className="px-3">{r.numOfAbdominalDistension}</td>
-                            <td className="px-3">{r.numOfAllergicRash}</td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">{r.numOfAbdominalDistension}</td>
+                            <td className="px-3 text-center">{r.numOfAllergicRash}</td>
+                            <td className="px-3 text-center">
                                 {r.numOfChestDiscomfort}
                             </td>
-                            <td className="px-3">{r.numOfDelirium}</td>
-                            <td className="px-3">{r.numOfDizziness}</td>
-                            <td className="px-3">{r.numOfEndotrachealIntubationDiscomfort}</td>
-                            <td className="px-3">{r.numOfEpigastricPain}</td>
-                            <td className="px-3">{r.numOfItching}</td>
-                            <td className="px-3">{r.numOfNauseaAndVomiting}</td>
-                            <td className="px-3">{r.numOfNauseaAndVomitingAndDizziness}</td>
-                            <td className="px-3">{r.numOfOther}</td>
-                            <td className="px-3">{r.numOfProlongedAnestheticRecovery}</td>
-                            <td className="px-3">{r.numOfPunctureSiteAbnormality}</td>
-                            <td className="px-3">{r.numOfTourniquetReaction}</td>
+                            <td className="px-3 text-center">{r.numOfDelirium}</td>
+                            <td className="px-3 text-center">{r.numOfDizziness}</td>
+                            <td className="px-3 text-center">{r.numOfEndotrachealIntubationDiscomfort}</td>
+                            <td className="px-3 text-center">{r.numOfEpigastricPain}</td>
+                            <td className="px-3 text-center">{r.numOfItching}</td>
+                            <td className="px-3 text-center">{r.numOfNauseaAndVomiting}</td>
+                            <td className="px-3 text-center">{r.numOfNauseaAndVomitingAndDizziness}</td>
+                            <td className="px-3 text-center">{r.numOfOther}</td>
+                            <td className="px-3 text-center">{r.numOfProlongedAnestheticRecovery}</td>
+                            <td className="px-3 text-center">{r.numOfPunctureSiteAbnormality}</td>
+                            <td className="px-3 text-center">{r.numOfTourniquetReaction}</td>
                         </tr>
                     ))}
                     {rows.length === 0 && !loading && (
@@ -428,46 +428,46 @@ export default function TableTwoMonthly() {
                             <td className="py-2 px-3">
                                 {t("totals")} ({rows.length} {t("rows")})
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfAbdominalDistension}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfAllergicRash}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfChestDiscomfort}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfDelirium}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfDizziness}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfEndotrachealIntubationDiscomfort}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfEpigastricPain}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfItching}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfNauseaAndVomiting}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfNauseaAndVomitingAndDizziness}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfOther}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfProlongedAnestheticRecovery}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfPunctureSiteAbnormality}
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numOfTourniquetReaction}
                             </td>
                         </tr>

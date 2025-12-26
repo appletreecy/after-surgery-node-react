@@ -318,18 +318,18 @@ export default function TableFiveQuarterly() {
                     <thead>
                     <tr className="text-left border-b bg-gray-50">
                         <th className="py-2 px-3">{t("quarter")}</th>
-                        <th className="px-3">{t("rescueCases")}</th>
-                        <th className="px-3">{t("deaths")}</th>
-                        <th className="px-3">{t("followUps")}</th>
+                        <th className="px-3 text-center">{t("rescueCases")}</th>
+                        <th className="px-3 text-center">{t("deaths")}</th>
+                        <th className="px-3 text-center">{t("followUps")}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {rows.map((r) => (
                         <tr key={r.quarter} className="border-b hover:bg-gray-50">
                             <td className="py-2 px-3">{`${year} ${r.quarter}`}</td>
-                            <td className="px-3">{r.numberOfCriticalRescueCases}</td>
-                            <td className="px-3">{r.numberOfDeaths}</td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">{r.numberOfCriticalRescueCases}</td>
+                            <td className="px-3 text-center">{r.numberOfDeaths}</td>
+                            <td className="px-3 text-center">
                                 {r.numberOfFollowUpsForCriticallyIllPatients}
                             </td>
                         </tr>
@@ -348,11 +348,11 @@ export default function TableFiveQuarterly() {
                             <td className="py-2 px-3">
                                 {t("totals")} ({rows.length} {t("rows")})
                             </td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">
                                 {totals.numberOfCriticalRescueCases}
                             </td>
-                            <td className="px-3">{totals.numberOfDeaths}</td>
-                            <td className="px-3">
+                            <td className="px-3 text-center">{totals.numberOfDeaths}</td>
+                            <td className="px-3 text-center">
                                 {totals.numberOfFollowUpsForCriticallyIllPatients}
                             </td>
                         </tr>
